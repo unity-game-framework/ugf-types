@@ -9,6 +9,6 @@
         "url": "https://github.com/unity-game-framework"
     },
     "dependencies": {
-        "com.ugf.assemblies": "1.0.1"
+        "com.ugf.assemblies": "1.1.0"
     }
 }
