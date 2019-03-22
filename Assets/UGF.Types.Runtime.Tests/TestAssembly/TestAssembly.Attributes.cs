@@ -1,0 +1,1 @@
+[assembly:UGF.Assemblies.Runtime.AssemblyBrowsable]
