@@ -28,6 +28,8 @@ namespace UGF.Types.Runtime
 
         public bool Contains(Type type)
         {
+            if (type == null) throw new ArgumentNullException(nameof(type));
+            
             return m_identifiers.ContainsKey(type);
         }
 
@@ -42,6 +44,21 @@ namespace UGF.Types.Runtime
         public bool Remove(TIdentifier identifier)
         {
             if (m_types.TryGetValue(identifier, out Type type))
+            {
+                m_types.Remove(identifier);
+                m_identifiers.Remove(type);
+                
+                return true;
+            }
+            
+            return false;
+        }
+
+        public bool Remove(Type type)
+        {
+            if (type == null) throw new ArgumentNullException(nameof(type));
+            
+            if (m_identifiers.TryGetValue(type, out TIdentifier identifier))
             {
                 m_types.Remove(identifier);
                 m_identifiers.Remove(type);
@@ -70,11 +87,15 @@ namespace UGF.Types.Runtime
 
         public TIdentifier GetIdentifier(Type type)
         {
+            if (type == null) throw new ArgumentNullException(nameof(type));
+            
             return m_identifiers[type];
         }
 
         public bool TryGetIdentifier(Type type, out TIdentifier identifier)
         {
+            if (type == null) throw new ArgumentNullException(nameof(type));
+            
             return m_identifiers.TryGetValue(type, out identifier);
         }
 

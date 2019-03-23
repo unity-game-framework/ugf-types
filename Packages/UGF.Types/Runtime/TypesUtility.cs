@@ -10,6 +10,8 @@ namespace UGF.Types.Runtime
     {
         public static void GetTypes<T>(ITypeProvider<T> provider)
         {
+            if (provider == null) throw new ArgumentNullException(nameof(provider));
+            
             var types = new List<Type>();
             
             AssemblyUtility.GetBrowsableTypes(types, typeof(TypeIdentifierAttributeBase));
@@ -19,6 +21,9 @@ namespace UGF.Types.Runtime
         
         public static void GetTypes<T>(ITypeProvider<T> provider, Assembly assembly)
         {
+            if (provider == null) throw new ArgumentNullException(nameof(provider));
+            if (assembly == null) throw new ArgumentNullException(nameof(assembly));
+            
             var types = new List<Type>();
             
             AssemblyUtility.GetBrowsableTypes(types, assembly, typeof(TypeIdentifierAttributeBase));
@@ -28,6 +33,9 @@ namespace UGF.Types.Runtime
 
         public static void AddTypes<T>(ITypeProvider<T> provider, List<Type> types)
         {
+            if (provider == null) throw new ArgumentNullException(nameof(provider));
+            if (types == null) throw new ArgumentNullException(nameof(types));
+            
             for (int i = 0; i < types.Count; i++)
             {
                 Type type = types[i];

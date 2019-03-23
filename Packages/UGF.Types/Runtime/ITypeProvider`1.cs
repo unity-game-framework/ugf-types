@@ -11,6 +11,7 @@ namespace UGF.Types.Runtime
         bool Contains(Type type);
         void Add(TIdentifier identifier, Type type);
         bool Remove(TIdentifier identifier);
+        bool Remove(Type type);
         void Clear();
         Type Get(TIdentifier identifier);
         bool TryGet(TIdentifier identifier, out Type type);
