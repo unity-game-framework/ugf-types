@@ -6,8 +6,18 @@ using UnityEngine;
 
 namespace UGF.Types.Runtime
 {
+    /// <summary>
+    /// Provides utilities to work with types.
+    /// </summary>
     public static class TypesUtility
     {
+        /// <summary>
+        /// Adds all found types marked with identifier attribute and register them into the specified provider.
+        /// <para>
+        /// Find types in all loaded assemblies.
+        /// </para>
+        /// </summary>
+        /// <param name="provider">The type provider to register.</param>
         public static void GetTypes<T>(ITypeProvider<T> provider)
         {
             if (provider == null) throw new ArgumentNullException(nameof(provider));
@@ -19,6 +29,14 @@ namespace UGF.Types.Runtime
             AddTypes(provider, types);
         }
         
+        /// <summary>
+        /// Adds all found types marked with identifier attribute and register them into the specified provider from the specified assembly.
+        /// <para>
+        /// Find types only in the specified assembly.
+        /// </para>
+        /// </summary>
+        /// <param name="provider">The type provider to register.</param>
+        /// <param name="assembly">The assembly to search.</param>
         public static void GetTypes<T>(ITypeProvider<T> provider, Assembly assembly)
         {
             if (provider == null) throw new ArgumentNullException(nameof(provider));
@@ -31,6 +49,11 @@ namespace UGF.Types.Runtime
             AddTypes(provider, types);
         }
 
+        /// <summary>
+        /// Adds types from the specified collection to the specified type provider.
+        /// </summary>
+        /// <param name="provider">The type provider to register.</param>
+        /// <param name="types">The collection of the types to add.</param>
         public static void AddTypes<T>(ITypeProvider<T> provider, List<Type> types)
         {
             if (provider == null) throw new ArgumentNullException(nameof(provider));

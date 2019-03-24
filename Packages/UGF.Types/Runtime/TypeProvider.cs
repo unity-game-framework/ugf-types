@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace UGF.Types.Runtime
 {
+    /// <summary>
+    /// Represents the type provider that store type by specific identifier.
+    /// </summary>
     public class TypeProvider<TIdentifier> : ITypeProvider<TIdentifier>
     {
         public int Count { get { return m_types.Count; } }
@@ -13,6 +16,11 @@ namespace UGF.Types.Runtime
         private readonly Dictionary<TIdentifier, Type> m_types;
         private readonly Dictionary<Type, TIdentifier> m_identifiers;
 
+        /// <summary>
+        /// Creates provider with the specified capacity and identifier comparer, if presents.
+        /// </summary>
+        /// <param name="capacity">The initial capacity of the types collection.</param>
+        /// <param name="comparer">The identifier comparer.</param>
         public TypeProvider(int capacity = 0, IEqualityComparer<TIdentifier> comparer = null)
         {
             if (capacity < 0) throw new ArgumentException("Capacity can not be less than zero.");
