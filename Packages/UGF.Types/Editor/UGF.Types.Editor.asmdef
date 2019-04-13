@@ -1,0 +1,15 @@
+{
+    "name": "UGF.Types.Editor",
+    "references": [
+        "GUID:743b637636640324ab90d9cd72077f47"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

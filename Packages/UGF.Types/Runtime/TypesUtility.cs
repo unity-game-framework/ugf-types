@@ -21,14 +21,14 @@ namespace UGF.Types.Runtime
         public static void GetTypes<T>(ITypeProvider<T> provider)
         {
             if (provider == null) throw new ArgumentNullException(nameof(provider));
-            
+
             var types = new List<Type>();
-            
+
             AssemblyUtility.GetBrowsableTypes(types, typeof(TypeIdentifierAttributeBase));
-            
+
             AddTypes(provider, types);
         }
-        
+
         /// <summary>
         /// Adds all found types marked with identifier attribute and register them into the specified provider from the specified assembly.
         /// <para>
@@ -41,11 +41,11 @@ namespace UGF.Types.Runtime
         {
             if (provider == null) throw new ArgumentNullException(nameof(provider));
             if (assembly == null) throw new ArgumentNullException(nameof(assembly));
-            
+
             var types = new List<Type>();
-            
+
             AssemblyUtility.GetBrowsableTypes(types, assembly, typeof(TypeIdentifierAttributeBase));
-            
+
             AddTypes(provider, types);
         }
 
@@ -58,7 +58,7 @@ namespace UGF.Types.Runtime
         {
             if (provider == null) throw new ArgumentNullException(nameof(provider));
             if (types == null) throw new ArgumentNullException(nameof(types));
-            
+
             for (int i = 0; i < types.Count; i++)
             {
                 Type type = types[i];
@@ -70,6 +70,36 @@ namespace UGF.Types.Runtime
                 else
                 {
                     Debug.LogWarning($"Can not add type to provider, cause '{typeof(ITypeIdentifierAttribute<T>)}' not found at specified type: '{type}'.");
+                }
+            }
+        }
+
+        public static void CollectTypes(ICollection<Type> types, Func<Type, bool> validate = null)
+        {
+            if (types == null) throw new ArgumentNullException(nameof(types));
+
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+
+            for (int i = 0; i < assemblies.Length; i++)
+            {
+                CollectTypes(types, assemblies[i], validate);
+            }
+        }
+
+        public static void CollectTypes(ICollection<Type> types, Assembly assembly, Func<Type, bool> validate = null)
+        {
+            if (types == null) throw new ArgumentNullException(nameof(types));
+            if (assembly == null) throw new ArgumentNullException(nameof(types));
+
+            Type[] assemblyTypes = assembly.GetTypes();
+
+            for (int i = 0; i < assemblyTypes.Length; i++)
+            {
+                Type type = assemblyTypes[i];
+
+                if (validate == null || validate(type))
+                {
+                    types.Add(type);
                 }
             }
         }
