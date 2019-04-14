@@ -14,6 +14,8 @@ namespace UGF.Types.Editor.IMGUI
 
         public TypesDropdown(IEnumerable<Type> types) : base(new AdvancedDropdownState())
         {
+            if (types == null) throw new ArgumentNullException(nameof(types));
+
             minimumSize = new Vector2(minimumSize.x, 500F);
 
             foreach (Type type in types)

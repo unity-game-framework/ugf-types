@@ -4,8 +4,12 @@
         "GUID:743b637636640324ab90d9cd72077f47",
         "GUID:eae7b1fac07195546ab082f2b00d807a"
     ],
-    "optionalUnityReferences": [],
-    "includePlatforms": [],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
