@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - `TypesUtility.CollectTypes` to collect types with validation.
 - `TypesEditorGUIUtility.GetTypesDropdown` to create an advanced editor dropdown that displays types selection menu.
+- `TypesUtility.TryGetIdentifierFromType` to retrieve type identifier from attribute directly.
 
 ### Changed
 - Nothing.

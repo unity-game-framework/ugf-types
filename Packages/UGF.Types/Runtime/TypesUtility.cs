@@ -120,5 +120,40 @@ namespace UGF.Types.Runtime
                 }
             }
         }
+
+        /// Tries to get type identifier from the specified type that contains identifier attribute.
+        /// </summary>
+        /// <param name="type">The target type.</param>
+        /// <param name="identifier">The found identifier.</param>
+        public static bool TryGetIdentifierFromType<T>(Type type, out T identifier)
+        {
+            if (type.GetCustomAttribute<TypeIdentifierAttributeBase>() is ITypeIdentifierAttribute<T> attribute)
+            {
+                identifier = attribute.Identifier;
+                return true;
+            }
+
+            identifier = default;
+            return false;
+        }
+
+        /// <summary>
+        /// Tries to get type identifier from the specified type that contains identifier attribute.
+        /// </summary>
+        /// <param name="type">The target type.</param>
+        /// <param name="identifier">The found identifier.</param>
+        public static bool TryGetIdentifierFromType(Type type, out object identifier)
+        {
+            var attribute = type.GetCustomAttribute<TypeIdentifierAttributeBase>();
+
+            if (attribute != null)
+            {
+                identifier = attribute.GetIdentifier();
+                return true;
+            }
+
+            identifier = null;
+            return false;
+        }
     }
 }

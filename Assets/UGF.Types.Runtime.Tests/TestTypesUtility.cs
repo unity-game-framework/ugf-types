@@ -65,5 +65,23 @@ namespace UGF.Types.Runtime.Tests
             Assert.AreEqual(1, types.Count);
             Assert.Contains(typeof(TestTypesUtility), types);
         }
+
+        [Test]
+        public void TryGetIdentifierFromTypeGeneric()
+        {
+            bool result = TypesUtility.TryGetIdentifierFromType(typeof(Target), out Guid id);
+
+            Assert.True(result);
+            Assert.AreEqual(new Guid("f6ca48946268479d95729efbc8be5eda"), id);
+        }
+
+        [Test]
+        public void TryGetIdentifierFromType()
+        {
+            bool result = TypesUtility.TryGetIdentifierFromType(typeof(Target), out object id);
+
+            Assert.True(result);
+            Assert.AreEqual(new Guid("f6ca48946268479d95729efbc8be5eda"), id);
+        }
     }
 }
