@@ -6,12 +6,25 @@ using UnityEngine;
 
 namespace UGF.Types.Editor.IMGUI
 {
+    /// <summary>
+    /// Represents advanced dropdown with types selection.
+    /// <para>
+    /// Types will be displayed used their namespaces as subdirectories.
+    /// </para>
+    /// </summary>
     public class TypesDropdown : AdvancedDropdown
     {
+        /// <summary>
+        /// Event that occurs when type selected.
+        /// </summary>
         public event Action<Type> Selected;
 
         private readonly Dictionary<int, Type> m_types = new Dictionary<int, Type>();
 
+        /// <summary>
+        /// Creates dropdown with specified types collection.
+        /// </summary>
+        /// <param name="types">The types collection to display.</param>
         public TypesDropdown(IEnumerable<Type> types) : base(new AdvancedDropdownState())
         {
             if (types == null) throw new ArgumentNullException(nameof(types));

@@ -5,8 +5,18 @@ using UGF.Types.Runtime;
 
 namespace UGF.Types.Editor.IMGUI
 {
+    /// <summary>
+    /// Provides utilities to work with editor IMGUI and types.
+    /// </summary>
     public static class TypesEditorGUIUtility
     {
+        /// <summary>
+        /// Gets dropdown used to display menu selection, with types that match specified func condition. if presents.
+        /// <para>
+        /// Returns menu with sorted types by their fullname.
+        /// </para>
+        /// </summary>
+        /// <param name="validate">The function to validate type.</param>
         public static TypesDropdown GetTypesDropdown(Func<Type, bool> validate = null)
         {
             var types = new List<Type>();
