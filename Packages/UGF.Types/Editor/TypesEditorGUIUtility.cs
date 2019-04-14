@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UGF.Types.Editor.IMGUI;
 using UGF.Types.Runtime;
 
-namespace UGF.Types.Editor.IMGUI
+namespace UGF.Types.Editor
 {
     /// <summary>
     /// Provides utilities to work with editor IMGUI and types.
