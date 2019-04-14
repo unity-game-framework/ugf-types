@@ -121,6 +121,7 @@ namespace UGF.Types.Runtime
             }
         }
 
+        /// <summary>
         /// Tries to get type identifier from the specified type that contains identifier attribute.
         /// </summary>
         /// <param name="type">The target type.</param>
