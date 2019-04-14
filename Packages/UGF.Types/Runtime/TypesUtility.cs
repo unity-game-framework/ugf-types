@@ -74,6 +74,11 @@ namespace UGF.Types.Runtime
             }
         }
 
+        /// <summary>
+        /// Tries to get type identifier from the specified type that contains identifier attribute.
+        /// </summary>
+        /// <param name="type">The target type.</param>
+        /// <param name="identifier">The found identifier.</param>
         public static bool TryGetIdentifierFromType<T>(Type type, out T identifier)
         {
             if (type.GetCustomAttribute<TypeIdentifierAttributeBase>() is ITypeIdentifierAttribute<T> attribute)
@@ -86,6 +91,11 @@ namespace UGF.Types.Runtime
             return false;
         }
 
+        /// <summary>
+        /// Tries to get type identifier from the specified type that contains identifier attribute.
+        /// </summary>
+        /// <param name="type">The target type.</param>
+        /// <param name="identifier">The found identifier.</param>
         public static bool TryGetIdentifierFromType(Type type, out object identifier)
         {
             var attribute = type.GetCustomAttribute<TypeIdentifierAttributeBase>();
