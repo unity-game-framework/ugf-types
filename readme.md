@@ -4,7 +4,7 @@ UGF.Types
 
 ## Info
 
-- **Version**: `1.0.0`
+- **Version**: `1.1.0`
 - **Unity Version**: `2019.1.0`
 - **Scripting Runtime Version**: `.NET 4.x Equivalent`
 - **Api Compatibility Level**: `.NET Standard 2.0`
