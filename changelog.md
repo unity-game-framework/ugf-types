@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [Milestone](https://github.com/unity-game-framework/ugf-types/milestone/0?closed=1)
 
 ### Added
+- `TypesUtility.CollectTypes` to collect types with validation.
+- `TypesEditorGUIUtility.GetTypesDropdown` to create an advanced editor dropdown that displays types selection menu.
 - `TypesUtility.TryGetIdentifierFromType` to retrieve type identifier from attribute directly.
 
 ### Changed

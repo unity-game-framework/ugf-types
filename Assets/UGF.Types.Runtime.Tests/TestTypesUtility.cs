@@ -45,6 +45,28 @@ namespace UGF.Types.Runtime.Tests
         }
 
         [Test]
+        public void CollectTypes()
+        {
+            var types = new List<Type>();
+
+            TypesUtility.CollectTypes(types, type => type.Name == typeof(TestTypesUtility).Name);
+
+            Assert.AreEqual(1, types.Count);
+            Assert.Contains(typeof(TestTypesUtility), types);
+        }
+
+        [Test]
+        public void CollectTypesWithAssembly()
+        {
+            var types = new List<Type>();
+
+            TypesUtility.CollectTypes(types, typeof(TestTypesUtility).Assembly, type => type.Name == typeof(TestTypesUtility).Name);
+
+            Assert.AreEqual(1, types.Count);
+            Assert.Contains(typeof(TestTypesUtility), types);
+        }
+
+        [Test]
         public void TryGetIdentifierFromTypeGeneric()
         {
             bool result = TypesUtility.TryGetIdentifierFromType(typeof(Target), out Guid id);
