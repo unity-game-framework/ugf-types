@@ -17,9 +17,19 @@ namespace UGF.Types.Runtime.Tests
         {
             var provider = new TypeProvider<Guid>();
 
-            TypesUtility.GetTypes(provider);
+            TypesUtility.GetTypes(provider, false);
 
             Assert.AreEqual(2, provider.Types.Count);
+        }
+
+        [Test]
+        public void GetTypesWithDefines()
+        {
+            var provider = new TypeProvider<Guid>();
+
+            TypesUtility.GetTypes(provider);
+
+            Assert.AreEqual(5, provider.Types.Count);
         }
 
         [Test]
@@ -82,6 +92,46 @@ namespace UGF.Types.Runtime.Tests
 
             Assert.True(result);
             Assert.AreEqual(new Guid("f6ca48946268479d95729efbc8be5eda"), id);
+        }
+
+        [Test]
+        public void GetTypeDefines()
+        {
+            var defines = new List<ITypeDefine>();
+
+            TypesUtility.GetTypeDefines(defines);
+
+            Assert.AreEqual(1, defines.Count);
+
+            ITypeDefine define = defines[0];
+
+            Assert.NotNull(define);
+            Assert.IsAssignableFrom<TestTypeDefine>(define);
+        }
+
+        [Test]
+        public void CreateTypes()
+        {
+            Type[] types =
+            {
+                typeof(Target),
+                typeof(Target)
+            };
+
+            var results = new List<Target>();
+
+            TypesUtility.CreateTypes(results, types);
+
+            Assert.AreEqual(2, results.Count);
+        }
+
+        [Test]
+        public void TryCreateType()
+        {
+            bool result = TypesUtility.TryCreateType(typeof(Target), out Target target);
+
+            Assert.True(result);
+            Assert.NotNull(target);
         }
     }
 }

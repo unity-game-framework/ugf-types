@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Reflection;
 using UGF.Assemblies.Runtime;
-using UnityEngine;
 
 namespace UGF.Types.Runtime
 {
@@ -18,7 +17,8 @@ namespace UGF.Types.Runtime
         /// </para>
         /// </summary>
         /// <param name="provider">The type provider to register.</param>
-        public static void GetTypes<T>(ITypeProvider<T> provider)
+        /// <param name="includeDefines">The value that determines whether to include types from found type defines.</param>
+        public static void GetTypes<T>(ITypeProvider<T> provider, bool includeDefines = true)
         {
             if (provider == null) throw new ArgumentNullException(nameof(provider));
 
@@ -27,6 +27,21 @@ namespace UGF.Types.Runtime
             AssemblyUtility.GetBrowsableTypes(types, typeof(TypeIdentifierAttributeBase));
 
             AddTypes(provider, types);
+
+            if (includeDefines)
+            {
+                var defines = new List<ITypeDefine>();
+
+                GetTypeDefines(defines);
+
+                for (int i = 0; i < defines.Count; i++)
+                {
+                    if (defines[i] is ITypeDefine<T> define)
+                    {
+                        define.Register(provider);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -165,10 +180,10 @@ namespace UGF.Types.Runtime
 
             AssemblyUtility.GetBrowsableTypes<TypeDefineAttribute>(types);
 
-            CreateTypes(defines, types, TypeCreationHandling.Warning);
+            CreateTypes(defines, types);
         }
 
-        public static void CreateTypes<T>(ICollection<T> results, IReadOnlyList<Type> types, TypeCreationHandling handling = TypeCreationHandling.Silent)
+        public static void CreateTypes<T>(ICollection<T> results, IReadOnlyList<Type> types)
         {
             if (results == null) throw new ArgumentNullException(nameof(results));
             if (types == null) throw new ArgumentNullException(nameof(types));
@@ -177,7 +192,7 @@ namespace UGF.Types.Runtime
             {
                 Type type = types[i];
 
-                if (TryCreateType(type, handling, out T result))
+                if (TryCreateType(type, out T result))
                 {
                     results.Add(result);
                 }
@@ -188,37 +203,12 @@ namespace UGF.Types.Runtime
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
 
-            return TryCreateType(type, TypeCreationHandling.Silent, out result);
-        }
-
-        public static bool TryCreateType<T>(Type type, TypeCreationHandling handling, out T result)
-        {
-            if (type == null) throw new ArgumentNullException(nameof(type));
-
             try
             {
                 result = (T)Activator.CreateInstance(type);
             }
-            catch (Exception exception)
+            catch (Exception)
             {
-                switch (handling)
-                {
-                    case TypeCreationHandling.Silent:
-                    {
-                        break;
-                    }
-                    case TypeCreationHandling.Warning:
-                    {
-                        Debug.LogWarning(exception);
-                        break;
-                    }
-                    case TypeCreationHandling.Throw:
-                    {
-                        throw;
-                    }
-                    default: throw new ArgumentOutOfRangeException(nameof(handling), handling, null);
-                }
-
                 result = default;
                 return false;
             }
