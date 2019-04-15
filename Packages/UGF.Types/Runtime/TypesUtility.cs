@@ -54,7 +54,7 @@ namespace UGF.Types.Runtime
         /// </summary>
         /// <param name="provider">The type provider to register.</param>
         /// <param name="types">The collection of the types to add.</param>
-        public static void AddTypes<T>(ITypeProvider<T> provider, List<Type> types)
+        public static void AddTypes<T>(ITypeProvider<T> provider, IReadOnlyList<Type> types)
         {
             if (provider == null) throw new ArgumentNullException(nameof(provider));
             if (types == null) throw new ArgumentNullException(nameof(types));
@@ -63,13 +63,9 @@ namespace UGF.Types.Runtime
             {
                 Type type = types[i];
 
-                if (type.GetCustomAttribute<TypeIdentifierAttributeBase>() is ITypeIdentifierAttribute<T> attribute)
+                if (TryGetIdentifierFromType(type, out T identifier))
                 {
-                    provider.Add(attribute.Identifier, type);
-                }
-                else
-                {
-                    Debug.LogWarning($"Can not add type to provider, cause '{typeof(ITypeIdentifierAttribute<T>)}' not found at specified type: '{type}'.");
+                    provider.Add(identifier, type);
                 }
             }
         }
@@ -95,7 +91,7 @@ namespace UGF.Types.Runtime
         }
 
         /// <summary>
-        /// Collects all types the specified assembly into the specified collection, that match by specified func condition, if presents.
+        /// Collects all types from the specified assembly into the collection, that match by specified func condition, if presents.
         /// <para>
         /// If validate func does not specified, will add all types from the assembly.
         /// </para>
@@ -128,6 +124,8 @@ namespace UGF.Types.Runtime
         /// <param name="identifier">The found identifier.</param>
         public static bool TryGetIdentifierFromType<T>(Type type, out T identifier)
         {
+            if (type == null) throw new ArgumentNullException(nameof(type));
+
             if (type.GetCustomAttribute<TypeIdentifierAttributeBase>() is ITypeIdentifierAttribute<T> attribute)
             {
                 identifier = attribute.Identifier;
@@ -145,6 +143,8 @@ namespace UGF.Types.Runtime
         /// <param name="identifier">The found identifier.</param>
         public static bool TryGetIdentifierFromType(Type type, out object identifier)
         {
+            if (type == null) throw new ArgumentNullException(nameof(type));
+
             var attribute = type.GetCustomAttribute<TypeIdentifierAttributeBase>();
 
             if (attribute != null)
@@ -155,6 +155,75 @@ namespace UGF.Types.Runtime
 
             identifier = null;
             return false;
+        }
+
+        public static void GetTypeDefines(ICollection<ITypeDefine> defines)
+        {
+            if (defines == null) throw new ArgumentNullException(nameof(defines));
+
+            var types = new List<Type>();
+
+            AssemblyUtility.GetBrowsableTypes<TypeDefineAttribute>(types);
+
+            CreateTypes(defines, types, TypeCreationHandling.Warning);
+        }
+
+        public static void CreateTypes<T>(ICollection<T> results, IReadOnlyList<Type> types, TypeCreationHandling handling = TypeCreationHandling.Silent)
+        {
+            if (results == null) throw new ArgumentNullException(nameof(results));
+            if (types == null) throw new ArgumentNullException(nameof(types));
+
+            for (int i = 0; i < types.Count; i++)
+            {
+                Type type = types[i];
+
+                if (TryCreateType(type, handling, out T result))
+                {
+                    results.Add(result);
+                }
+            }
+        }
+
+        public static bool TryCreateType<T>(Type type, out T result)
+        {
+            if (type == null) throw new ArgumentNullException(nameof(type));
+
+            return TryCreateType(type, TypeCreationHandling.Silent, out result);
+        }
+
+        public static bool TryCreateType<T>(Type type, TypeCreationHandling handling, out T result)
+        {
+            if (type == null) throw new ArgumentNullException(nameof(type));
+
+            try
+            {
+                result = (T)Activator.CreateInstance(type);
+            }
+            catch (Exception exception)
+            {
+                switch (handling)
+                {
+                    case TypeCreationHandling.Silent:
+                    {
+                        break;
+                    }
+                    case TypeCreationHandling.Warning:
+                    {
+                        Debug.LogWarning(exception);
+                        break;
+                    }
+                    case TypeCreationHandling.Throw:
+                    {
+                        throw;
+                    }
+                    default: throw new ArgumentOutOfRangeException(nameof(handling), handling, null);
+                }
+
+                result = default;
+                return false;
+            }
+
+            return true;
         }
     }
 }
