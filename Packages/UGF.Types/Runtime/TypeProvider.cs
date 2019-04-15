@@ -67,6 +67,11 @@ namespace UGF.Types.Runtime
             return m_identifiers.TryGetValue(type, out identifier);
         }
 
+        public Dictionary<TIdentifier, Type>.Enumerator GetEnumerator()
+        {
+            return m_types.GetEnumerator();
+        }
+
         void ITypeProvider.Add(object identifier, Type type)
         {
             Add((TIdentifier)identifier, type);
