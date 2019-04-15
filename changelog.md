@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nothing.
 
 ### Changed
-- Nothing.
+- `ITypeProvider`, `ITypeProvider<T>`, `TypeProvider` has been refactored. (#9)
 
 ### Deprecated
 - Nothing.
