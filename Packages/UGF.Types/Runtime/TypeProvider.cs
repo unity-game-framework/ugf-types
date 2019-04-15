@@ -18,6 +18,11 @@ namespace UGF.Types.Runtime
         private readonly Dictionary<TIdentifier, Type> m_types;
         private readonly Dictionary<Type, TIdentifier> m_identifiers;
 
+        /// <summary>
+        /// Creates provider with specified capacity and identifier comparer.
+        /// </summary>
+        /// <param name="capacity">The initial capacity to store.</param>
+        /// <param name="identifierComparer">The comparer of the identifiers.</param>
         public TypeProvider(int capacity = 0, IEqualityComparer<TIdentifier> identifierComparer = null)
         {
             if (capacity < 0) throw new ArgumentException("Capacity can not be less than zero.", nameof(capacity));
