@@ -10,6 +10,10 @@ namespace UGF.Types.Runtime
     /// </summary>
     public static class TypesUtility
     {
+        public static void FindTypes(ICollection<Type> types, Assembly assembly = null, bool includeDefines = true)
+        {
+        }
+
         /// <summary>
         /// Adds all found types marked with identifier attribute and register them into the specified provider.
         /// <para>
@@ -17,7 +21,7 @@ namespace UGF.Types.Runtime
         /// </para>
         /// </summary>
         /// <param name="provider">The type provider to register.</param>
-        /// <param name="includeDefines">The value that determines whether to include types from found type defines.</param>
+        /// <param name="includeDefines">Determines whether to include types from found type defines.</param>
         public static void GetTypes<T>(ITypeProvider<T> provider, bool includeDefines = true)
         {
             if (provider == null) throw new ArgumentNullException(nameof(provider));
@@ -172,13 +176,28 @@ namespace UGF.Types.Runtime
             return false;
         }
 
-        public static void GetTypeDefines(ICollection<ITypeDefine> defines)
+        /// <summary>
+        /// Gets type defines into specified collection.
+        /// <para>
+        /// If an assembly not specified, will search through the all assemblies.
+        /// </para>
+        /// </summary>
+        /// <param name="defines">The collection to add found defines.</param>
+        /// <param name="assembly">The assembly to search.</param>
+        public static void GetTypeDefines(ICollection<ITypeDefine> defines, Assembly assembly = null)
         {
             if (defines == null) throw new ArgumentNullException(nameof(defines));
 
             var types = new List<Type>();
 
-            AssemblyUtility.GetBrowsableTypes<TypeDefineAttribute>(types);
+            if (assembly == null)
+            {
+                AssemblyUtility.GetBrowsableTypes<TypeDefineAttribute>(types);
+            }
+            else
+            {
+                AssemblyUtility.GetBrowsableTypes(types, assembly, typeof(TypeDefineAttribute));
+            }
 
             CreateTypes(defines, types);
         }
@@ -203,16 +222,25 @@ namespace UGF.Types.Runtime
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
 
+            return TryCreateType(type, out result, out _);
+        }
+
+        public static bool TryCreateType<T>(Type type, out T result, out Exception exception)
+        {
+            if (type == null) throw new ArgumentNullException(nameof(type));
+
             try
             {
                 result = (T)Activator.CreateInstance(type);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 result = default;
+                exception = e;
                 return false;
             }
 
+            exception = null;
             return true;
         }
     }
