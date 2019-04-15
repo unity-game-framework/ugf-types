@@ -1,50 +1,40 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace UGF.Types.Runtime
 {
     /// <summary>
     /// Represents the type provider that store type by specific identifier.
     /// </summary>
-    public class TypeProvider<TIdentifier> : ITypeProvider<TIdentifier>
+    public class TypeProvider<TIdentifier> : ITypeProvider<TIdentifier>, ITypeProvider
     {
-        public int Count { get { return m_types.Count; } }
         public Type IdentifierType { get; } = typeof(TIdentifier);
-        public IEqualityComparer<TIdentifier> Comparer { get { return m_types.Comparer; } }
+        public IEqualityComparer<TIdentifier> IdentifierComparer { get { return m_types.Comparer; } }
+        public IReadOnlyDictionary<TIdentifier, Type> Types { get; }
+
+        IEnumerable<KeyValuePair<object, Type>> ITypeProvider.Types { get { return TypesEnumerable(); } }
 
         private readonly Dictionary<TIdentifier, Type> m_types;
         private readonly Dictionary<Type, TIdentifier> m_identifiers;
 
         /// <summary>
-        /// Creates provider with the specified capacity and identifier comparer, if presents.
+        /// Creates provider with specified capacity and identifier comparer.
         /// </summary>
-        /// <param name="capacity">The initial capacity of the types collection.</param>
-        /// <param name="comparer">The identifier comparer.</param>
-        public TypeProvider(int capacity = 0, IEqualityComparer<TIdentifier> comparer = null)
+        /// <param name="capacity">The initial capacity to store.</param>
+        /// <param name="identifierComparer">The comparer of the identifiers.</param>
+        public TypeProvider(int capacity = 0, IEqualityComparer<TIdentifier> identifierComparer = null)
         {
-            if (capacity < 0) throw new ArgumentException("Capacity can not be less than zero.");
-            
-            m_types = new Dictionary<TIdentifier, Type>(capacity, comparer);
+            if (capacity < 0) throw new ArgumentException("Capacity can not be less than zero.", nameof(capacity));
+
+            m_types = new Dictionary<TIdentifier, Type>(capacity, identifierComparer);
             m_identifiers = new Dictionary<Type, TIdentifier>(capacity);
-        }
 
-        public bool Contains(TIdentifier identifier)
-        {
-            return m_types.ContainsKey(identifier);
-        }
-
-        public bool Contains(Type type)
-        {
-            if (type == null) throw new ArgumentNullException(nameof(type));
-            
-            return m_identifiers.ContainsKey(type);
+            Types = new ReadOnlyDictionary<TIdentifier, Type>(m_types);
         }
 
         public void Add(TIdentifier identifier, Type type)
         {
-            if (type == null) throw new ArgumentNullException(nameof(type));
-            
             m_types.Add(identifier, type);
             m_identifiers.Add(type, identifier);
         }
@@ -55,25 +45,9 @@ namespace UGF.Types.Runtime
             {
                 m_types.Remove(identifier);
                 m_identifiers.Remove(type);
-                
                 return true;
             }
-            
-            return false;
-        }
 
-        public bool Remove(Type type)
-        {
-            if (type == null) throw new ArgumentNullException(nameof(type));
-            
-            if (m_identifiers.TryGetValue(type, out TIdentifier identifier))
-            {
-                m_types.Remove(identifier);
-                m_identifiers.Remove(type);
-                
-                return true;
-            }
-            
             return false;
         }
 
@@ -83,27 +57,13 @@ namespace UGF.Types.Runtime
             m_identifiers.Clear();
         }
 
-        public Type Get(TIdentifier identifier)
-        {
-            return m_types[identifier];
-        }
-
-        public bool TryGet(TIdentifier identifier, out Type type)
-        {
-            return m_types.TryGetValue(identifier, out type);
-        }
-
         public TIdentifier GetIdentifier(Type type)
         {
-            if (type == null) throw new ArgumentNullException(nameof(type));
-            
             return m_identifiers[type];
         }
 
         public bool TryGetIdentifier(Type type, out TIdentifier identifier)
         {
-            if (type == null) throw new ArgumentNullException(nameof(type));
-            
             return m_identifiers.TryGetValue(type, out identifier);
         }
 
@@ -112,14 +72,39 @@ namespace UGF.Types.Runtime
             return m_types.GetEnumerator();
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        void ITypeProvider.Add(object identifier, Type type)
         {
-            return ((IEnumerable)m_types).GetEnumerator();
+            Add((TIdentifier)identifier, type);
         }
 
-        IEnumerator<KeyValuePair<TIdentifier, Type>> IEnumerable<KeyValuePair<TIdentifier, Type>>.GetEnumerator()
+        bool ITypeProvider.Remove(object identifier)
         {
-            return ((IEnumerable<KeyValuePair<TIdentifier, Type>>)m_types).GetEnumerator();
+            return Remove((TIdentifier)identifier);
+        }
+
+        object ITypeProvider.GetIdentifier(Type type)
+        {
+            return GetIdentifier(type);
+        }
+
+        bool ITypeProvider.TryGetIdentifier(Type type, out object identifier)
+        {
+            if (TryGetIdentifier(type, out TIdentifier typeIdentifier))
+            {
+                identifier = typeIdentifier;
+                return true;
+            }
+
+            identifier = null;
+            return false;
+        }
+
+        private IEnumerable<KeyValuePair<object, Type>> TypesEnumerable()
+        {
+            foreach (KeyValuePair<TIdentifier, Type> pair in m_types)
+            {
+                yield return new KeyValuePair<object, Type>(pair.Key, pair.Value);
+            }
         }
     }
 }
