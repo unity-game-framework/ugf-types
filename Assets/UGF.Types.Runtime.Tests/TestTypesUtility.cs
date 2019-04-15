@@ -19,7 +19,7 @@ namespace UGF.Types.Runtime.Tests
 
             TypesUtility.GetTypes(provider);
 
-            Assert.AreEqual(2, provider.Count);
+            Assert.AreEqual(2, provider.Types.Count);
         }
 
         [Test]
@@ -30,7 +30,7 @@ namespace UGF.Types.Runtime.Tests
 
             TypesUtility.GetTypes(provider, assembly);
 
-            Assert.AreEqual(1, provider.Count);
+            Assert.AreEqual(1, provider.Types.Count);
         }
 
         [Test]
@@ -41,7 +41,7 @@ namespace UGF.Types.Runtime.Tests
 
             TypesUtility.AddTypes(provider, types);
 
-            Assert.AreEqual(1, provider.Count);
+            Assert.AreEqual(1, provider.Types.Count);
         }
 
         [Test]
