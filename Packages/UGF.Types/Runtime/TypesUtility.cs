@@ -10,128 +10,56 @@ namespace UGF.Types.Runtime
     /// </summary>
     public static class TypesUtility
     {
-        public static void FindTypes(ICollection<Type> types, Assembly assembly = null, bool includeDefines = true)
+        /// <summary>
+        /// Gets type defines into specified collection.
+        /// <para>
+        /// If an assembly not specified, will search through the all assemblies.
+        /// </para>
+        /// </summary>
+        /// <param name="defines">The collection to add found defines.</param>
+        /// <param name="assembly">The assembly to search.</param>
+        public static void GetTypeDefines(ICollection<ITypeDefine> defines, Assembly assembly = null)
         {
+            if (defines == null) throw new ArgumentNullException(nameof(defines));
+
+            foreach (Type type in AssemblyUtility.GetBrowsableTypes<TypeDefineAttribute>(assembly))
+            {
+                if (TryCreateType(type, out ITypeDefine define))
+                {
+                    defines.Add(define);
+                }
+            }
         }
 
         /// <summary>
         /// Adds all found types marked with identifier attribute and register them into the specified provider.
         /// <para>
-        /// Find types in all loaded assemblies.
-        /// </para>
-        /// </summary>
-        /// <param name="provider">The type provider to register.</param>
-        /// <param name="includeDefines">Determines whether to include types from found type defines.</param>
-        public static void GetTypes<T>(ITypeProvider<T> provider, bool includeDefines = true)
-        {
-            if (provider == null) throw new ArgumentNullException(nameof(provider));
-
-            var types = new List<Type>();
-
-            AssemblyUtility.GetBrowsableTypes(types, typeof(TypeIdentifierAttributeBase));
-
-            AddTypes(provider, types);
-
-            if (includeDefines)
-            {
-                var defines = new List<ITypeDefine>();
-
-                GetTypeDefines(defines);
-
-                for (int i = 0; i < defines.Count; i++)
-                {
-                    if (defines[i] is ITypeDefine<T> define)
-                    {
-                        define.Register(provider);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Adds all found types marked with identifier attribute and register them into the specified provider from the specified assembly.
-        /// <para>
-        /// Find types only in the specified assembly.
+        /// If an assembly not specified, will search through the all assemblies.
         /// </para>
         /// </summary>
         /// <param name="provider">The type provider to register.</param>
         /// <param name="assembly">The assembly to search.</param>
-        public static void GetTypes<T>(ITypeProvider<T> provider, Assembly assembly)
+        /// <param name="includeDefines">Determines whether to include types from found type defines.</param>
+        public static void GetTypes<T>(ITypeProvider<T> provider, Assembly assembly = null, bool includeDefines = true)
         {
             if (provider == null) throw new ArgumentNullException(nameof(provider));
-            if (assembly == null) throw new ArgumentNullException(nameof(assembly));
 
-            var types = new List<Type>();
-
-            AssemblyUtility.GetBrowsableTypes(types, assembly, typeof(TypeIdentifierAttributeBase));
-
-            AddTypes(provider, types);
-        }
-
-        /// <summary>
-        /// Adds types from the specified collection to the specified type provider.
-        /// </summary>
-        /// <param name="provider">The type provider to register.</param>
-        /// <param name="types">The collection of the types to add.</param>
-        public static void AddTypes<T>(ITypeProvider<T> provider, IReadOnlyList<Type> types)
-        {
-            if (provider == null) throw new ArgumentNullException(nameof(provider));
-            if (types == null) throw new ArgumentNullException(nameof(types));
-
-            for (int i = 0; i < types.Count; i++)
+            foreach (Type type in AssemblyUtility.GetBrowsableTypes<TypeIdentifierAttributeBase>(assembly))
             {
-                Type type = types[i];
-
                 if (TryGetIdentifierFromType(type, out T identifier))
                 {
                     provider.Add(identifier, type);
                 }
             }
-        }
 
-        /// <summary>
-        /// Collects all types into the specified collection that match by specified func condition, if presents.
-        /// <para>
-        /// If validate func does not specified, will add all types.
-        /// </para>
-        /// </summary>
-        /// <param name="types">The collection to add types.</param>
-        /// <param name="validate">The function to validate type.</param>
-        public static void CollectTypes(ICollection<Type> types, Func<Type, bool> validate = null)
-        {
-            if (types == null) throw new ArgumentNullException(nameof(types));
-
-            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-
-            for (int i = 0; i < assemblies.Length; i++)
+            if (includeDefines)
             {
-                CollectTypes(types, assemblies[i], validate);
-            }
-        }
-
-        /// <summary>
-        /// Collects all types from the specified assembly into the collection, that match by specified func condition, if presents.
-        /// <para>
-        /// If validate func does not specified, will add all types from the assembly.
-        /// </para>
-        /// </summary>
-        /// <param name="types">The collection to add types.</param>
-        /// <param name="assembly">The assembly to gather types.</param>
-        /// <param name="validate">The function to validate type.</param>
-        public static void CollectTypes(ICollection<Type> types, Assembly assembly, Func<Type, bool> validate = null)
-        {
-            if (types == null) throw new ArgumentNullException(nameof(types));
-            if (assembly == null) throw new ArgumentNullException(nameof(types));
-
-            Type[] assemblyTypes = assembly.GetTypes();
-
-            for (int i = 0; i < assemblyTypes.Length; i++)
-            {
-                Type type = assemblyTypes[i];
-
-                if (validate == null || validate(type))
+                foreach (Type type in AssemblyUtility.GetBrowsableTypes<TypeDefineAttribute>(assembly))
                 {
-                    types.Add(type);
+                    if (TryCreateType(type, out ITypeDefine<T> define))
+                    {
+                        define.Register(provider);
+                    }
                 }
             }
         }
@@ -177,29 +105,34 @@ namespace UGF.Types.Runtime
         }
 
         /// <summary>
-        /// Gets type defines into specified collection.
+        /// Collects all types into the specified collection that match by specified func condition, if presents.
+        /// <para>
+        /// If validate func does not specified, will add all types.
+        /// </para>
         /// <para>
         /// If an assembly not specified, will search through the all assemblies.
         /// </para>
         /// </summary>
-        /// <param name="defines">The collection to add found defines.</param>
+        /// <param name="results">The collection to add types.</param>
+        /// <param name="validate">The function to validate type.</param>
         /// <param name="assembly">The assembly to search.</param>
-        public static void GetTypeDefines(ICollection<ITypeDefine> defines, Assembly assembly = null)
+        public static void CollectTypes(ICollection<Type> results, Func<Type, bool> validate = null, Assembly assembly = null)
         {
-            if (defines == null) throw new ArgumentNullException(nameof(defines));
-
-            var types = new List<Type>();
+            if (results == null) throw new ArgumentNullException(nameof(results));
 
             if (assembly == null)
             {
-                AssemblyUtility.GetBrowsableTypes<TypeDefineAttribute>(types);
+                Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+
+                for (int i = 0; i < assemblies.Length; i++)
+                {
+                    InternalCollectTypes(results, assemblies[i], validate);
+                }
             }
             else
             {
-                AssemblyUtility.GetBrowsableTypes(types, assembly, typeof(TypeDefineAttribute));
+                InternalCollectTypes(results, assembly, validate);
             }
-
-            CreateTypes(defines, types);
         }
 
         public static void CreateTypes<T>(ICollection<T> results, IReadOnlyList<Type> types)
@@ -242,6 +175,21 @@ namespace UGF.Types.Runtime
 
             exception = null;
             return true;
+        }
+
+        private static void InternalCollectTypes(ICollection<Type> results, Assembly assembly, Func<Type, bool> validate = null)
+        {
+            Type[] types = assembly.GetTypes();
+
+            for (int i = 0; i < types.Length; i++)
+            {
+                Type type = types[i];
+
+                if (validate == null || validate(type))
+                {
+                    results.Add(type);
+                }
+            }
         }
     }
 }

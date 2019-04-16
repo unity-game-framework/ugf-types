@@ -17,7 +17,7 @@ namespace UGF.Types.Runtime.Tests
         {
             var provider = new TypeProvider<Guid>();
 
-            TypesUtility.GetTypes(provider, false);
+            TypesUtility.GetTypes(provider, null, false);
 
             Assert.AreEqual(2, provider.Types.Count);
         }
@@ -38,18 +38,7 @@ namespace UGF.Types.Runtime.Tests
             var provider = new TypeProvider<Guid>();
             Assembly assembly = typeof(Target).Assembly;
 
-            TypesUtility.GetTypes(provider, assembly);
-
-            Assert.AreEqual(1, provider.Types.Count);
-        }
-
-        [Test]
-        public void AddTypes()
-        {
-            var provider = new TypeProvider<Guid>();
-            var types = new List<Type> { typeof(Target) };
-
-            TypesUtility.AddTypes(provider, types);
+            TypesUtility.GetTypes(provider, assembly, false);
 
             Assert.AreEqual(1, provider.Types.Count);
         }
@@ -70,7 +59,7 @@ namespace UGF.Types.Runtime.Tests
         {
             var types = new List<Type>();
 
-            TypesUtility.CollectTypes(types, typeof(TestTypesUtility).Assembly, type => type.Name == typeof(TestTypesUtility).Name);
+            TypesUtility.CollectTypes(types, type => type.Name == typeof(TestTypesUtility).Name, typeof(TestTypesUtility).Assembly);
 
             Assert.AreEqual(1, types.Count);
             Assert.Contains(typeof(TestTypesUtility), types);

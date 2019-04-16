@@ -7,6 +7,7 @@ namespace UGF.Types.Runtime
     /// </summary>
     public sealed class TypeIdentifierGuidAttribute : TypeIdentifierAttributeBase, ITypeIdentifierAttribute<Guid>
     {
+        public override Type IdentifierType { get; } = typeof(Guid);
         public Guid Identifier { get; }
 
         /// <summary>
