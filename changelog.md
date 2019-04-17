@@ -9,16 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [Milestone](https://github.com/unity-game-framework/ugf-types/milestone/0?closed=1)
 
 ### Added
-- Nothing.
+- `ITypeDefine`, `ITypeDefine<T>`, `TypeDefineBase<T>` and `TypeDefine<T>` to define identifiers for external types.
+- `TypeDefineAttribute` to mark type defines.
+- `TypesUtility.GetTypeDefines` to collect defines that contains type define attribute.
+- `TypesUtility.GetTypes` overload to collect types that contains type identifier attribute.
+- `TypesUtility.TryCreateType` as simplified way to create objects from the specified type.
 
 ### Changed
-- `ITypeProvider`, `ITypeProvider<T>`, `TypeProvider` has been refactored. (#9)
+- `UGF.Assemblies` dependency version changed to `1.4.0`.
+- `ITypeProvider`, `ITypeProvider<T>` and `TypeProvider<T>` have been refactored. (#9)
+- `TypeIdentifierAttributeBase` has been rewritten and changed to non-abstract `TypeIdentifierAttribute`.
+- `TypesUtility.GetTypes` overloads that works with provider, to support type defines.
 
 ### Deprecated
 - Nothing.
 
 ### Removed
-- Nothing.
+- `TypeIdentifierAttributeBase` and replaced by non-abstract `TypeIdentifierAttribute`.
+- `TypesUtility.AddTypes` because it was useless.
+- `TypesUtility.CollectTypes` because using standard ways more efficient.
 
 ### Fixed
 - Nothing.
