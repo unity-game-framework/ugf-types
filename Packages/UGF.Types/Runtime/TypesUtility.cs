@@ -104,53 +104,6 @@ namespace UGF.Types.Runtime
             return false;
         }
 
-        /// <summary>
-        /// Collects all types into the specified collection that match by specified func condition, if presents.
-        /// <para>
-        /// If validate func does not specified, will add all types.
-        /// </para>
-        /// <para>
-        /// If an assembly not specified, will search through the all assemblies.
-        /// </para>
-        /// </summary>
-        /// <param name="results">The collection to add types.</param>
-        /// <param name="validate">The function to validate type.</param>
-        /// <param name="assembly">The assembly to search.</param>
-        public static void CollectTypes(ICollection<Type> results, Func<Type, bool> validate = null, Assembly assembly = null)
-        {
-            if (results == null) throw new ArgumentNullException(nameof(results));
-
-            if (assembly == null)
-            {
-                Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-
-                for (int i = 0; i < assemblies.Length; i++)
-                {
-                    InternalCollectTypes(results, assemblies[i], validate);
-                }
-            }
-            else
-            {
-                InternalCollectTypes(results, assembly, validate);
-            }
-        }
-
-        public static void CreateTypes<T>(ICollection<T> results, IReadOnlyList<Type> types)
-        {
-            if (results == null) throw new ArgumentNullException(nameof(results));
-            if (types == null) throw new ArgumentNullException(nameof(types));
-
-            for (int i = 0; i < types.Count; i++)
-            {
-                Type type = types[i];
-
-                if (TryCreateType(type, out T result))
-                {
-                    results.Add(result);
-                }
-            }
-        }
-
         public static bool TryCreateType<T>(Type type, out T result)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
@@ -175,21 +128,6 @@ namespace UGF.Types.Runtime
 
             exception = null;
             return true;
-        }
-
-        private static void InternalCollectTypes(ICollection<Type> results, Assembly assembly, Func<Type, bool> validate = null)
-        {
-            Type[] types = assembly.GetTypes();
-
-            for (int i = 0; i < types.Length; i++)
-            {
-                Type type = types[i];
-
-                if (validate == null || validate(type))
-                {
-                    results.Add(type);
-                }
-            }
         }
     }
 }
