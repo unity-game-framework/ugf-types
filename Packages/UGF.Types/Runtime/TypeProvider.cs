@@ -33,6 +33,17 @@ namespace UGF.Types.Runtime
             Types = new ReadOnlyDictionary<TIdentifier, Type>(m_types);
         }
 
+        public bool TryAdd(Type type)
+        {
+            if (TypesUtility.TryGetIdentifierFromType(type, out TIdentifier identifier))
+            {
+                Add(identifier, type);
+                return true;
+            }
+
+            return false;
+        }
+
         public void Add(TIdentifier identifier, Type type)
         {
             m_types.Add(identifier, type);

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Reflection;
 using UGF.Assemblies.Runtime;
-using UnityEngine;
 
 namespace UGF.Types.Runtime
 {
@@ -12,111 +11,133 @@ namespace UGF.Types.Runtime
     public static class TypesUtility
     {
         /// <summary>
-        /// Adds all found types marked with identifier attribute and register them into the specified provider.
+        /// Gets type that contains type identifier attribute and supports specified identifier type and add them into specified collection.
         /// <para>
-        /// Find types in all loaded assemblies.
+        /// If identifier type not specified, will collect all found defines.
+        /// </para>
+        /// <para>
+        /// If an assembly not specified, will search through the all assemblies.
         /// </para>
         /// </summary>
-        /// <param name="provider">The type provider to register.</param>
-        public static void GetTypes<T>(ITypeProvider<T> provider)
+        /// <param name="results">The collection to add found types.</param>
+        /// <param name="identifierType">The identifier type of the type defines.</param>
+        /// <param name="assembly">The assembly to search.</param>
+        /// <param name="inherit">Determines whether to search in inheritance chain to find the attribute.</param>
+        public static void GetTypes(ICollection<Type> results, Type identifierType = null, Assembly assembly = null, bool inherit = true)
         {
-            if (provider == null) throw new ArgumentNullException(nameof(provider));
+            if (results == null) throw new ArgumentNullException(nameof(results));
 
-            var types = new List<Type>();
+            foreach (Type type in AssemblyUtility.GetBrowsableTypes<TypeIdentifierAttribute>(assembly, inherit))
+            {
+                var attribute = type.GetCustomAttribute<TypeIdentifierAttribute>();
 
-            AssemblyUtility.GetBrowsableTypes(types, typeof(TypeIdentifierAttributeBase));
-
-            AddTypes(provider, types);
+                if (identifierType == null || attribute.IdentifierType == identifierType)
+                {
+                    results.Add(type);
+                }
+            }
         }
 
         /// <summary>
-        /// Adds all found types marked with identifier attribute and register them into the specified provider from the specified assembly.
+        /// Gets defines that contains type define attribute and supports specified identifier type, and add them into specified collection.
         /// <para>
-        /// Find types only in the specified assembly.
+        /// If identifier type not specified, will collect all found defines.
+        /// </para>
+        /// <para>
+        /// If an assembly not specified, will search through the all assemblies.
+        /// </para>
+        /// </summary>
+        /// <param name="results">The collection to add found defines.</param>
+        /// <param name="identifierType">The identifier type of the type defines.</param>
+        /// <param name="assembly">The assembly to search.</param>
+        /// <param name="inherit">Determines whether to search in inheritance chain to find the attribute.</param>
+        public static void GetTypeDefines(ICollection<ITypeDefine> results, Type identifierType = null, Assembly assembly = null, bool inherit = true)
+        {
+            if (results == null) throw new ArgumentNullException(nameof(results));
+
+            foreach (Type type in AssemblyUtility.GetBrowsableTypes<TypeDefineAttribute>(assembly, inherit))
+            {
+                var attribute = type.GetCustomAttribute<TypeDefineAttribute>();
+
+                if ((identifierType == null || attribute.IdentifierType == identifierType) && TryCreateType(type, out ITypeDefine define))
+                {
+                    results.Add(define);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds all found types marked with identifier attribute and register them into the specified provider.
+        /// <para>
+        /// If an assembly not specified, will search through the all assemblies.
+        /// </para>
+        /// </summary>
+        /// <param name="provider">The type provider to register.</param>
+        /// <param name="identifierType">The type of the identifier that provider supports.</param>
+        /// <param name="assembly">The assembly to search.</param>
+        /// <param name="includeDefines">Determines whether to include types from found type defines.</param>
+        /// <param name="inherit">Determines whether to search in inheritance chain to find the attribute.</param>
+        public static void GetTypes(ITypeProvider provider, Type identifierType, Assembly assembly = null, bool includeDefines = true, bool inherit = true)
+        {
+            if (provider == null) throw new ArgumentNullException(nameof(provider));
+            if (identifierType == null) throw new ArgumentNullException(nameof(identifierType));
+
+            foreach (Type type in AssemblyUtility.GetBrowsableTypes<TypeIdentifierAttribute>(assembly, inherit))
+            {
+                var attribute = type.GetCustomAttribute<TypeIdentifierAttribute>();
+
+                if (attribute.IdentifierType == identifierType)
+                {
+                    provider.TryAdd(type);
+                }
+            }
+
+            if (includeDefines)
+            {
+                foreach (Type type in AssemblyUtility.GetBrowsableTypes<TypeDefineAttribute>(assembly, inherit))
+                {
+                    var attribute = type.GetCustomAttribute<TypeDefineAttribute>();
+
+                    if (attribute.IdentifierType == identifierType && TryCreateType(type, out ITypeDefine define))
+                    {
+                        define.Register(provider);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds all found types marked with identifier attribute and register them into the specified provider.
+        /// <para>
+        /// If an assembly not specified, will search through the all assemblies.
         /// </para>
         /// </summary>
         /// <param name="provider">The type provider to register.</param>
         /// <param name="assembly">The assembly to search.</param>
-        public static void GetTypes<T>(ITypeProvider<T> provider, Assembly assembly)
+        /// <param name="includeDefines">Determines whether to include types from found type defines.</param>
+        /// <param name="inherit">Determines whether to search in inheritance chain to find the attribute.</param>
+        public static void GetTypes<T>(ITypeProvider<T> provider, Assembly assembly = null, bool includeDefines = true, bool inherit = true)
         {
             if (provider == null) throw new ArgumentNullException(nameof(provider));
-            if (assembly == null) throw new ArgumentNullException(nameof(assembly));
 
-            var types = new List<Type>();
-
-            AssemblyUtility.GetBrowsableTypes(types, assembly, typeof(TypeIdentifierAttributeBase));
-
-            AddTypes(provider, types);
-        }
-
-        /// <summary>
-        /// Adds types from the specified collection to the specified type provider.
-        /// </summary>
-        /// <param name="provider">The type provider to register.</param>
-        /// <param name="types">The collection of the types to add.</param>
-        public static void AddTypes<T>(ITypeProvider<T> provider, List<Type> types)
-        {
-            if (provider == null) throw new ArgumentNullException(nameof(provider));
-            if (types == null) throw new ArgumentNullException(nameof(types));
-
-            for (int i = 0; i < types.Count; i++)
+            foreach (Type type in AssemblyUtility.GetBrowsableTypes<TypeIdentifierAttribute>(assembly, inherit))
             {
-                Type type = types[i];
-
-                if (type.GetCustomAttribute<TypeIdentifierAttributeBase>() is ITypeIdentifierAttribute<T> attribute)
+                if (TryGetIdentifierFromType(type, out T identifier))
                 {
-                    provider.Add(attribute.Identifier, type);
-                }
-                else
-                {
-                    Debug.LogWarning($"Can not add type to provider, cause '{typeof(ITypeIdentifierAttribute<T>)}' not found at specified type: '{type}'.");
+                    provider.Add(identifier, type);
                 }
             }
-        }
 
-        /// <summary>
-        /// Collects all types into the specified collection that match by specified func condition, if presents.
-        /// <para>
-        /// If validate func does not specified, will add all types.
-        /// </para>
-        /// </summary>
-        /// <param name="types">The collection to add types.</param>
-        /// <param name="validate">The function to validate type.</param>
-        public static void CollectTypes(ICollection<Type> types, Func<Type, bool> validate = null)
-        {
-            if (types == null) throw new ArgumentNullException(nameof(types));
-
-            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-
-            for (int i = 0; i < assemblies.Length; i++)
+            if (includeDefines)
             {
-                CollectTypes(types, assemblies[i], validate);
-            }
-        }
-
-        /// <summary>
-        /// Collects all types the specified assembly into the specified collection, that match by specified func condition, if presents.
-        /// <para>
-        /// If validate func does not specified, will add all types from the assembly.
-        /// </para>
-        /// </summary>
-        /// <param name="types">The collection to add types.</param>
-        /// <param name="assembly">The assembly to gather types.</param>
-        /// <param name="validate">The function to validate type.</param>
-        public static void CollectTypes(ICollection<Type> types, Assembly assembly, Func<Type, bool> validate = null)
-        {
-            if (types == null) throw new ArgumentNullException(nameof(types));
-            if (assembly == null) throw new ArgumentNullException(nameof(types));
-
-            Type[] assemblyTypes = assembly.GetTypes();
-
-            for (int i = 0; i < assemblyTypes.Length; i++)
-            {
-                Type type = assemblyTypes[i];
-
-                if (validate == null || validate(type))
+                foreach (Type type in AssemblyUtility.GetBrowsableTypes<TypeDefineAttribute>(assembly, inherit))
                 {
-                    types.Add(type);
+                    var attribute = type.GetCustomAttribute<TypeDefineAttribute>();
+
+                    if (attribute.IdentifierType == typeof(T) && TryCreateType(type, out ITypeDefine<T> define))
+                    {
+                        define.Register(provider);
+                    }
                 }
             }
         }
@@ -128,7 +149,9 @@ namespace UGF.Types.Runtime
         /// <param name="identifier">The found identifier.</param>
         public static bool TryGetIdentifierFromType<T>(Type type, out T identifier)
         {
-            if (type.GetCustomAttribute<TypeIdentifierAttributeBase>() is ITypeIdentifierAttribute<T> attribute)
+            if (type == null) throw new ArgumentNullException(nameof(type));
+
+            if (type.GetCustomAttribute<TypeIdentifierAttribute>() is ITypeIdentifierAttribute<T> attribute)
             {
                 identifier = attribute.Identifier;
                 return true;
@@ -145,7 +168,9 @@ namespace UGF.Types.Runtime
         /// <param name="identifier">The found identifier.</param>
         public static bool TryGetIdentifierFromType(Type type, out object identifier)
         {
-            var attribute = type.GetCustomAttribute<TypeIdentifierAttributeBase>();
+            if (type == null) throw new ArgumentNullException(nameof(type));
+
+            var attribute = type.GetCustomAttribute<TypeIdentifierAttribute>();
 
             if (attribute != null)
             {
@@ -155,6 +180,49 @@ namespace UGF.Types.Runtime
 
             identifier = null;
             return false;
+        }
+
+        /// <summary>
+        /// Tries to create specified type.
+        /// <para>
+        /// The type must contains default constructor.
+        /// </para>
+        /// </summary>
+        /// <param name="type">The type to create.</param>
+        /// <param name="result">The created result.</param>
+        public static bool TryCreateType<T>(Type type, out T result)
+        {
+            if (type == null) throw new ArgumentNullException(nameof(type));
+
+            return TryCreateType(type, out result, out _);
+        }
+
+        /// <summary>
+        /// Tries to create specified type.
+        /// <para>
+        /// The type must contains default constructor.
+        /// </para>
+        /// </summary>
+        /// <param name="type">The type to create.</param>
+        /// <param name="result">The created result.</param>
+        /// <param name="exception">The exception that could occurs during creation.</param>
+        public static bool TryCreateType<T>(Type type, out T result, out Exception exception)
+        {
+            if (type == null) throw new ArgumentNullException(nameof(type));
+
+            try
+            {
+                result = (T)Activator.CreateInstance(type);
+            }
+            catch (Exception e)
+            {
+                result = default;
+                exception = e;
+                return false;
+            }
+
+            exception = null;
+            return true;
         }
     }
 }

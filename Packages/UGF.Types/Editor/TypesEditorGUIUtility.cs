@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UGF.Types.Editor.IMGUI;
-using UGF.Types.Runtime;
 
 namespace UGF.Types.Editor
 {
@@ -22,7 +22,16 @@ namespace UGF.Types.Editor
         {
             var types = new List<Type>();
 
-            TypesUtility.CollectTypes(types, validate);
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                foreach (Type type in assembly.GetTypes())
+                {
+                    if (validate == null || validate(type))
+                    {
+                        types.Add(type);
+                    }
+                }
+            }
 
             types.Sort((type1, type2) =>
             {
