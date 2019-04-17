@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 
@@ -15,11 +16,56 @@ namespace UGF.Types.Runtime.Tests
         [Test]
         public void GetTypes()
         {
+            var types = new List<Type>();
+
+            TypesUtility.GetTypes(types, typeof(Guid));
+
+            Assert.AreEqual(2, types.Count);
+        }
+
+        [Test]
+        public void GetTypeDefines()
+        {
+            var defines = new List<ITypeDefine>();
+
+            TypesUtility.GetTypeDefines(defines);
+
+            Assert.AreEqual(1, defines.Count);
+
+            ITypeDefine define = defines[0];
+
+            Assert.NotNull(define);
+            Assert.IsAssignableFrom<TestTypeDefine>(define);
+        }
+
+        [Test]
+        public void GetTypesProvider()
+        {
+            ITypeProvider provider = new TypeProvider<Guid>();
+
+            TypesUtility.GetTypes(provider, typeof(Guid), null, false);
+
+            Assert.AreEqual(2, provider.Types.Count());
+        }
+
+        [Test]
+        public void GetTypesProviderGeneric()
+        {
+            var provider = new TypeProvider<Guid>();
+
+            TypesUtility.GetTypes(provider, null, false);
+
+            Assert.AreEqual(2, provider.Types.Count);
+        }
+
+        [Test]
+        public void GetTypesWithDefines()
+        {
             var provider = new TypeProvider<Guid>();
 
             TypesUtility.GetTypes(provider);
 
-            Assert.AreEqual(2, provider.Count);
+            Assert.AreEqual(5, provider.Types.Count);
         }
 
         [Test]
@@ -28,42 +74,9 @@ namespace UGF.Types.Runtime.Tests
             var provider = new TypeProvider<Guid>();
             Assembly assembly = typeof(Target).Assembly;
 
-            TypesUtility.GetTypes(provider, assembly);
+            TypesUtility.GetTypes(provider, assembly, false);
 
-            Assert.AreEqual(1, provider.Count);
-        }
-
-        [Test]
-        public void AddTypes()
-        {
-            var provider = new TypeProvider<Guid>();
-            var types = new List<Type> { typeof(Target) };
-
-            TypesUtility.AddTypes(provider, types);
-
-            Assert.AreEqual(1, provider.Count);
-        }
-
-        [Test]
-        public void CollectTypes()
-        {
-            var types = new List<Type>();
-
-            TypesUtility.CollectTypes(types, type => type.Name == typeof(TestTypesUtility).Name);
-
-            Assert.AreEqual(1, types.Count);
-            Assert.Contains(typeof(TestTypesUtility), types);
-        }
-
-        [Test]
-        public void CollectTypesWithAssembly()
-        {
-            var types = new List<Type>();
-
-            TypesUtility.CollectTypes(types, typeof(TestTypesUtility).Assembly, type => type.Name == typeof(TestTypesUtility).Name);
-
-            Assert.AreEqual(1, types.Count);
-            Assert.Contains(typeof(TestTypesUtility), types);
+            Assert.AreEqual(1, provider.Types.Count);
         }
 
         [Test]
@@ -82,6 +95,15 @@ namespace UGF.Types.Runtime.Tests
 
             Assert.True(result);
             Assert.AreEqual(new Guid("f6ca48946268479d95729efbc8be5eda"), id);
+        }
+
+        [Test]
+        public void TryCreateType()
+        {
+            bool result = TypesUtility.TryCreateType(typeof(Target), out Target target);
+
+            Assert.True(result);
+            Assert.NotNull(target);
         }
     }
 }
