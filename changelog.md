@@ -9,6 +9,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [Milestone](https://github.com/unity-game-framework/ugf-types/milestone/0?closed=1)
 
 ### Added
+- Nothing.
+
+### Changed
+- Nothing.
+
+### Deprecated
+- Nothing.
+
+### Removed
+- Nothing.
+
+### Fixed
+- Nothing.
+
+### Security
+- Nothing.
+
+## 2.0.0 - 2019-04-17
+- [Commits](https://github.com/unity-game-framework/ugf-types/compare/1.1.0...2.0.0)
+- [Milestone](https://github.com/unity-game-framework/ugf-types/milestone/3?closed=1)
+
+### Added
 - `ITypeDefine`, `ITypeDefine<T>`, `TypeDefineBase<T>` and `TypeDefine<T>` to define identifiers for external types.
 - `TypeDefineAttribute` to mark type defines.
 - `TypesUtility.GetTypeDefines` to collect defines that contains type define attribute.
@@ -21,19 +43,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `TypeIdentifierAttributeBase` has been rewritten and changed to non-abstract `TypeIdentifierAttribute`.
 - `TypesUtility.GetTypes` overloads that works with provider, to support type defines.
 
-### Deprecated
-- Nothing.
-
 ### Removed
 - `TypeIdentifierAttributeBase` and replaced by non-abstract `TypeIdentifierAttribute`.
 - `TypesUtility.AddTypes` because it was useless.
 - `TypesUtility.CollectTypes` because using standard ways more efficient.
-
-### Fixed
-- Nothing.
-
-### Security
-- Nothing.
 
 ## 1.1.0 - 2019-04-14
 - [Commits](https://github.com/unity-game-framework/ugf-types/compare/1.0.0...1.1.0)
