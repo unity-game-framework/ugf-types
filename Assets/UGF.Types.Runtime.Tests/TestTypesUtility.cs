@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 
@@ -14,6 +15,41 @@ namespace UGF.Types.Runtime.Tests
 
         [Test]
         public void GetTypes()
+        {
+            var types = new List<Type>();
+
+            TypesUtility.GetTypes(types, typeof(Guid));
+
+            Assert.AreEqual(2, types.Count);
+        }
+
+        [Test]
+        public void GetTypeDefines()
+        {
+            var defines = new List<ITypeDefine>();
+
+            TypesUtility.GetTypeDefines(defines);
+
+            Assert.AreEqual(1, defines.Count);
+
+            ITypeDefine define = defines[0];
+
+            Assert.NotNull(define);
+            Assert.IsAssignableFrom<TestTypeDefine>(define);
+        }
+
+        [Test]
+        public void GetTypesProvider()
+        {
+            ITypeProvider provider = new TypeProvider<Guid>();
+
+            TypesUtility.GetTypes(provider, typeof(Guid), null, false);
+
+            Assert.AreEqual(2, provider.Types.Count());
+        }
+
+        [Test]
+        public void GetTypesProviderGeneric()
         {
             var provider = new TypeProvider<Guid>();
 
@@ -59,21 +95,6 @@ namespace UGF.Types.Runtime.Tests
 
             Assert.True(result);
             Assert.AreEqual(new Guid("f6ca48946268479d95729efbc8be5eda"), id);
-        }
-
-        [Test]
-        public void GetTypeDefines()
-        {
-            var defines = new List<ITypeDefine>();
-
-            TypesUtility.GetTypeDefines(defines);
-
-            Assert.AreEqual(1, defines.Count);
-
-            ITypeDefine define = defines[0];
-
-            Assert.NotNull(define);
-            Assert.IsAssignableFrom<TestTypeDefine>(define);
         }
 
         [Test]
