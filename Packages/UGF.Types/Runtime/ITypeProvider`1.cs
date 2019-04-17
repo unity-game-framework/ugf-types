@@ -24,6 +24,12 @@ namespace UGF.Types.Runtime
         IReadOnlyDictionary<TIdentifier, Type> Types { get; }
 
         /// <summary>
+        /// Tries to add specified type, if that contains attribute with supported identifier type.
+        /// </summary>
+        /// <param name="type">The type to add.</param>
+        bool TryAdd(Type type);
+
+        /// <summary>
         /// Adds the specified type by specified identifier.
         /// </summary>
         /// <param name="identifier">The identifier of the type.</param>

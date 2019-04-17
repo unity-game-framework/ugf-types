@@ -2,7 +2,7 @@ using System;
 
 namespace UGF.Types.Runtime.Tests
 {
-    [TypeDefine]
+    [TypeDefine(typeof(Guid))]
     public class TestTypeDefine : TypeDefine<Guid>
     {
         public TestTypeDefine()
