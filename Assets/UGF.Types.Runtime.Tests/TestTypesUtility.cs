@@ -14,6 +14,40 @@ namespace UGF.Types.Runtime.Tests
         }
 
         [Test]
+        public void GetTypesAll()
+        {
+            int count0 = TypesUtility.GetTypesAll().Count();
+            int count1 = AllTypes().Count();
+
+            Assert.AreEqual(count1, count0);
+
+            IEnumerable<Type> AllTypes()
+            {
+                foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+                {
+                    Type[] types;
+
+                    try
+                    {
+                        types = assembly.GetTypes();
+                    }
+                    catch (ReflectionTypeLoadException exception)
+                    {
+                        types = exception.Types;
+                    }
+
+                    foreach (Type type in types)
+                    {
+                        if (type != null)
+                        {
+                            yield return type;
+                        }
+                    }
+                }
+            }
+        }
+
+        [Test]
         public void GetTypes()
         {
             var types = new List<Type>();
