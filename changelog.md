@@ -9,8 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [Milestone](https://github.com/unity-game-framework/ugf-types/milestone/0?closed=1)
 
 ### Added
-- `TypesUtility.GetTypesAll` to enumerate through the all available types.
-- `TypesAllEnumerable` to enumerate through the all available types. (#13)
+- Nothing.
 
 ### Changed
 - Nothing.
@@ -27,6 +26,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 - Nothing.
 
+## 2.1.0 - 2019-04-18
+- [Commits](https://github.com/unity-game-framework/ugf-types/compare/1.4.0...1.4.1)
+- [Milestone](https://github.com/unity-game-framework/ugf-types/milestone/4?closed=1)
+
+### Added
+- `TypesUtility.GetTypesAll` to enumerate through the all available types.
+- `TypesAllEnumerable` to enumerate through the all available types. (#13)
+
+### Changed
+- Package dependencies:
+    - `com.ugf.assemblies`: from `1.4.0` to `1.4.1`.
+
 ## 2.0.0 - 2019-04-17
 - [Commits](https://github.com/unity-game-framework/ugf-types/compare/1.1.0...2.0.0)
 - [Milestone](https://github.com/unity-game-framework/ugf-types/milestone/3?closed=1)
@@ -39,7 +50,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `TypesUtility.TryCreateType` as simplified way to create objects from the specified type.
 
 ### Changed
-- `UGF.Assemblies` dependency version changed to `1.4.0`.
+- Package dependencies:
+    - `com.ugf.assemblies`: from `1.1.0` to `1.4.0`.
 - `ITypeProvider`, `ITypeProvider<T>` and `TypeProvider<T>` have been refactored. (#9)
 - `TypeIdentifierAttributeBase` has been rewritten and changed to non-abstract `TypeIdentifierAttribute`.
 - `TypesUtility.GetTypes` overloads that works with provider, to support type defines.
