@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [Milestone](https://github.com/unity-game-framework/ugf-types/milestone/0?closed=1)
 
 ### Added
-- Nothing.
+- `TypesUtility.GetTypesAll` to enumerate through the all available types.
+- `TypesAllEnumerable` to enumerate through the all available types. (#13)
 
 ### Changed
 - Nothing.
