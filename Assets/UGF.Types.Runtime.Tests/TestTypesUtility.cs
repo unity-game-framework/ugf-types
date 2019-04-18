@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
+using UnityEngine;
 
 namespace UGF.Types.Runtime.Tests
 {
@@ -11,6 +12,47 @@ namespace UGF.Types.Runtime.Tests
         [TypeIdentifierGuid("f6ca48946268479d95729efbc8be5eda")]
         private class Target
         {
+        }
+
+        [Test]
+        public void GetTypesAll()
+        {
+            int count0 = TypesUtility.GetTypesAll().Count();
+            int count1 = AllTypes().Count();
+
+            Assert.AreEqual(count1, count0);
+
+            int value = 0;
+
+            Action a = () =>
+            {
+                Debug.Log(value);
+            };
+
+            IEnumerable<Type> AllTypes()
+            {
+                foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+                {
+                    Type[] types;
+
+                    try
+                    {
+                        types = assembly.GetTypes();
+                    }
+                    catch (ReflectionTypeLoadException exception)
+                    {
+                        types = exception.Types;
+                    }
+
+                    foreach (Type type in types)
+                    {
+                        if (type != null)
+                        {
+                            yield return type;
+                        }
+                    }
+                }
+            }
         }
 
         [Test]

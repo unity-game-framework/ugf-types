@@ -10,6 +10,11 @@ namespace UGF.Types.Runtime
     /// </summary>
     public static class TypesUtility
     {
+        public static TypesAllEnumerable GetTypesAll()
+        {
+            return new TypesAllEnumerable(AppDomain.CurrentDomain.GetAssemblies());
+        }
+
         /// <summary>
         /// Gets type that contains type identifier attribute and supports specified identifier type and add them into specified collection.
         /// <para>
