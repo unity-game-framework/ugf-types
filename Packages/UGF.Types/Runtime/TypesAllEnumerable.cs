@@ -5,6 +5,9 @@ using System.Reflection;
 
 namespace UGF.Types.Runtime
 {
+    /// <summary>
+    /// Represents enumerable through the all loaded types from the specified assembly collection.
+    /// </summary>
     public struct TypesAllEnumerable : IEnumerable<Type>
     {
         private readonly IReadOnlyList<Assembly> m_assemblies;
@@ -102,6 +105,10 @@ namespace UGF.Types.Runtime
             }
         }
 
+        /// <summary>
+        /// Creates enumerable from the specified collection of the assemblies.
+        /// </summary>
+        /// <param name="assemblies">The assemblies to enumerate.</param>
         public TypesAllEnumerable(IReadOnlyList<Assembly> assemblies)
         {
             m_assemblies = assemblies;

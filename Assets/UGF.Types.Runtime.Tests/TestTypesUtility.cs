@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
-using UnityEngine;
 
 namespace UGF.Types.Runtime.Tests
 {
@@ -21,13 +20,6 @@ namespace UGF.Types.Runtime.Tests
             int count1 = AllTypes().Count();
 
             Assert.AreEqual(count1, count0);
-
-            int value = 0;
-
-            Action a = () =>
-            {
-                Debug.Log(value);
-            };
 
             IEnumerable<Type> AllTypes()
             {

@@ -10,6 +10,9 @@ namespace UGF.Types.Runtime
     /// </summary>
     public static class TypesUtility
     {
+        /// <summary>
+        /// Gets enumerable through the all loaded types.
+        /// </summary>
         public static TypesAllEnumerable GetTypesAll()
         {
             return new TypesAllEnumerable(AppDomain.CurrentDomain.GetAssemblies());
