@@ -12,7 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nothing.
 
 ### Changed
-- Nothing.
+- Package dependencies:
+    - `com.ugf.assemblies`: from `1.4.1` to `1.5.1`.
 
 ### Deprecated
 - Nothing.
@@ -21,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nothing.
 
 ### Fixed
-- Nothing.
+- `UGF.Types.Editor.asmdef` targeting to any platform what cause build errors.
 
 ### Security
 - Nothing.
