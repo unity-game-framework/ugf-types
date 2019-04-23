@@ -12,8 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nothing.
 
 ### Changed
-- Package dependencies:
-    - `com.ugf.assemblies`: from `1.4.1` to `1.5.1`.
+- Nothing.
 
 ### Deprecated
 - Nothing.
@@ -22,13 +21,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nothing.
 
 ### Fixed
-- `UGF.Types.Editor.asmdef` targeting to any platform what cause build errors.
+- Nothing.
 
 ### Security
 - Nothing.
 
+## 2.1.1 - 2019-04-23
+- [Commits](https://github.com/unity-game-framework/ugf-types/compare/2.1.0...2.1.1)
+- [Milestone](https://github.com/unity-game-framework/ugf-types/milestone/5?closed=1)
+
+### Changed
+- Package dependencies:
+    - `com.ugf.assemblies`: from `1.4.1` to `1.5.1`.
+
+### Fixed
+- `UGF.Types.Editor.asmdef` targeting to any platform what cause build errors.
+
 ## 2.1.0 - 2019-04-18
-- [Commits](https://github.com/unity-game-framework/ugf-types/compare/1.4.0...1.4.1)
+- [Commits](https://github.com/unity-game-framework/ugf-types/compare/2.0.0...2.1.0)
 - [Milestone](https://github.com/unity-game-framework/ugf-types/milestone/4?closed=1)
 
 ### Added
