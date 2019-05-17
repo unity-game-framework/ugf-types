@@ -232,5 +232,33 @@ namespace UGF.Types.Runtime
             exception = null;
             return true;
         }
+
+        public static bool TryCreateType<T>(Type type, object[] arguments, out T result)
+        {
+            if (type == null) throw new ArgumentNullException(nameof(type));
+            if (arguments == null) throw new ArgumentNullException(nameof(arguments));
+
+            return TryCreateType(type, arguments, out result, out _);
+        }
+
+        public static bool TryCreateType<T>(Type type, object[] arguments, out T result, out Exception exception)
+        {
+            if (type == null) throw new ArgumentNullException(nameof(type));
+            if (arguments == null) throw new ArgumentNullException(nameof(arguments));
+
+            try
+            {
+                result = (T)Activator.CreateInstance(type, arguments);
+            }
+            catch (Exception e)
+            {
+                result = default;
+                exception = e;
+                return false;
+            }
+
+            exception = null;
+            return true;
+        }
     }
 }
