@@ -161,6 +161,12 @@ namespace UGF.Types.Runtime
             return false;
         }
 
+        /// <summary>
+        /// Tries to get type identifier from the specified type that contains identifier attribute.
+        /// </summary>
+        /// <param name="type">The target type.</param>
+        /// <param name="identifierType">The type of the identifier.</param>
+        /// <param name="identifier">The found identifier.</param>
         public static bool TryGetIdentifierFromType(Type type, Type identifierType, out object identifier)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
@@ -176,6 +182,12 @@ namespace UGF.Types.Runtime
             return false;
         }
 
+        /// <summary>
+        /// Tries to get identifier type attribute from the specified type that support specified identifier type.
+        /// </summary>
+        /// <param name="type">The target type.</param>
+        /// <param name="identifierType">The type of the identifier.</param>
+        /// <param name="attribute">The found attribute.</param>
         public static bool TryGetIdentifierAttribute(Type type, Type identifierType, out TypeIdentifierAttribute attribute)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
@@ -239,6 +251,15 @@ namespace UGF.Types.Runtime
             return true;
         }
 
+        /// <summary>
+        /// Tries to create specified type.
+        /// <para>
+        /// The type must contains default constructor.
+        /// </para>
+        /// </summary>
+        /// <param name="type">The type to create.</param>
+        /// <param name="arguments">The constructor arguments.</param>
+        /// <param name="result">The created result.</param>
         public static bool TryCreateType<T>(Type type, object[] arguments, out T result)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
@@ -247,6 +268,16 @@ namespace UGF.Types.Runtime
             return TryCreateType(type, arguments, out result, out _);
         }
 
+        /// <summary>
+        /// Tries to create specified type.
+        /// <para>
+        /// The type must contains default constructor.
+        /// </para>
+        /// </summary>
+        /// <param name="type">The type to create.</param>
+        /// <param name="arguments">The constructor arguments.</param>
+        /// <param name="result">The created result.</param>
+        /// <param name="exception">The exception that could occurs during creation.</param>
         public static bool TryCreateType<T>(Type type, object[] arguments, out T result, out Exception exception)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
