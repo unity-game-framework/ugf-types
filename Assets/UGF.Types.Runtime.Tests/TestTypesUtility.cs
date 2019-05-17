@@ -74,6 +74,28 @@ namespace UGF.Types.Runtime.Tests
         }
 
         [Test]
+        public void GetTypesString()
+        {
+            var types = new List<Type>();
+
+            TypesUtility.GetTypes(types, typeof(string));
+
+            Assert.AreEqual(1, types.Count);
+            Assert.Contains(typeof(Target3), types);
+        }
+
+        [Test]
+        public void GetTypesInt32()
+        {
+            var types = new List<Type>();
+
+            TypesUtility.GetTypes(types, typeof(int));
+
+            Assert.AreEqual(1, types.Count);
+            Assert.Contains(typeof(Target3), types);
+        }
+
+        [Test]
         public void GetTypeDefines()
         {
             var defines = new List<ITypeDefine>();
@@ -96,6 +118,26 @@ namespace UGF.Types.Runtime.Tests
             TypesUtility.GetTypes(provider, typeof(Guid), null, false);
 
             Assert.AreEqual(2, provider.Types.Count());
+        }
+
+        [Test]
+        public void GetTypesProviderString()
+        {
+            ITypeProvider provider = new TypeProvider<string>();
+
+            TypesUtility.GetTypes(provider, typeof(string), null, false);
+
+            Assert.AreEqual(1, provider.Types.Count());
+        }
+
+        [Test]
+        public void GetTypesProviderInt32()
+        {
+            ITypeProvider provider = new TypeProvider<int>();
+
+            TypesUtility.GetTypes(provider, typeof(int), null, false);
+
+            Assert.AreEqual(1, provider.Types.Count());
         }
 
         [Test]
