@@ -37,9 +37,7 @@ namespace UGF.Types.Runtime
 
             foreach (Type type in AssemblyUtility.GetBrowsableTypes<TypeIdentifierAttribute>(assembly, inherit))
             {
-                var attribute = type.GetCustomAttribute<TypeIdentifierAttribute>();
-
-                if (identifierType == null || attribute.IdentifierType == identifierType)
+                if (identifierType == null || TryGetIdentifierAttribute(type, identifierType, out _))
                 {
                     results.Add(type);
                 }
@@ -92,9 +90,7 @@ namespace UGF.Types.Runtime
 
             foreach (Type type in AssemblyUtility.GetBrowsableTypes<TypeIdentifierAttribute>(assembly, inherit))
             {
-                var attribute = type.GetCustomAttribute<TypeIdentifierAttribute>();
-
-                if (attribute.IdentifierType == identifierType)
+                if (TryGetIdentifierAttribute(type, identifierType, out _))
                 {
                     provider.TryAdd(type);
                 }
@@ -159,13 +155,28 @@ namespace UGF.Types.Runtime
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
 
-            if (type.GetCustomAttribute<TypeIdentifierAttribute>() is ITypeIdentifierAttribute<T> attribute)
+            if (TryGetIdentifierAttribute(type, typeof(T), out TypeIdentifierAttribute attribute) && attribute is ITypeIdentifierAttribute<T> typeIdentifierAttribute)
             {
-                identifier = attribute.Identifier;
+                identifier = typeIdentifierAttribute.Identifier;
                 return true;
             }
 
             identifier = default;
+            return false;
+        }
+
+        public static bool TryGetIdentifierFromType(Type type, Type identifierType, out object identifier)
+        {
+            if (type == null) throw new ArgumentNullException(nameof(type));
+            if (identifierType == null) throw new ArgumentNullException(nameof(identifierType));
+
+            if (TryGetIdentifierAttribute(type, identifierType, out TypeIdentifierAttribute attribute))
+            {
+                identifier = attribute.GetIdentifier();
+                return true;
+            }
+
+            identifier = null;
             return false;
         }
 
@@ -174,6 +185,7 @@ namespace UGF.Types.Runtime
         /// </summary>
         /// <param name="type">The target type.</param>
         /// <param name="identifier">The found identifier.</param>
+        [Obsolete("TryGetIdentifierFromType has been deprecated. Use overload with identifier type instead.")]
         public static bool TryGetIdentifierFromType(Type type, out object identifier)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
@@ -187,6 +199,26 @@ namespace UGF.Types.Runtime
             }
 
             identifier = null;
+            return false;
+        }
+
+        public static bool TryGetIdentifierAttribute(Type type, Type identifierType, out TypeIdentifierAttribute attribute)
+        {
+            if (type == null) throw new ArgumentNullException(nameof(type));
+            if (identifierType == null) throw new ArgumentNullException(nameof(identifierType));
+
+            object[] attributes = type.GetCustomAttributes(true);
+
+            for (int i = 0; i < attributes.Length; i++)
+            {
+                if (attributes[i] is TypeIdentifierAttribute typeIdentifierAttribute && typeIdentifierAttribute.IdentifierType == identifierType)
+                {
+                    attribute = typeIdentifierAttribute;
+                    return true;
+                }
+            }
+
+            attribute = null;
             return false;
         }
 
