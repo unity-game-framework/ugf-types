@@ -15,6 +15,11 @@ namespace UGF.Types.Runtime
 
         private readonly object m_identifier;
 
+        /// <summary>
+        /// Creates with the specified type of the identifier and identifier value.
+        /// </summary>
+        /// <param name="identifierType">The type of the identifier.</param>
+        /// <param name="identifier">The identifier value.</param>
         public TypeIdentifierAttribute(Type identifierType, object identifier)
         {
             m_identifier = identifier;

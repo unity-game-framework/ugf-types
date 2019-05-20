@@ -13,6 +13,22 @@ namespace UGF.Types.Runtime.Tests
         {
         }
 
+        private class Target2
+        {
+            public object Value { get; }
+
+            public Target2(object value)
+            {
+                Value = value;
+            }
+        }
+
+        [TypeIdentifierInt32(10)]
+        [TypeIdentifierString("target")]
+        private class Target3
+        {
+        }
+
         [Test]
         public void GetTypesAll()
         {
@@ -58,6 +74,28 @@ namespace UGF.Types.Runtime.Tests
         }
 
         [Test]
+        public void GetTypesString()
+        {
+            var types = new List<Type>();
+
+            TypesUtility.GetTypes(types, typeof(string));
+
+            Assert.AreEqual(1, types.Count);
+            Assert.Contains(typeof(Target3), types);
+        }
+
+        [Test]
+        public void GetTypesInt32()
+        {
+            var types = new List<Type>();
+
+            TypesUtility.GetTypes(types, typeof(int));
+
+            Assert.AreEqual(1, types.Count);
+            Assert.Contains(typeof(Target3), types);
+        }
+
+        [Test]
         public void GetTypeDefines()
         {
             var defines = new List<ITypeDefine>();
@@ -80,6 +118,26 @@ namespace UGF.Types.Runtime.Tests
             TypesUtility.GetTypes(provider, typeof(Guid), null, false);
 
             Assert.AreEqual(2, provider.Types.Count());
+        }
+
+        [Test]
+        public void GetTypesProviderString()
+        {
+            ITypeProvider provider = new TypeProvider<string>();
+
+            TypesUtility.GetTypes(provider, typeof(string), null, false);
+
+            Assert.AreEqual(1, provider.Types.Count());
+        }
+
+        [Test]
+        public void GetTypesProviderInt32()
+        {
+            ITypeProvider provider = new TypeProvider<int>();
+
+            TypesUtility.GetTypes(provider, typeof(int), null, false);
+
+            Assert.AreEqual(1, provider.Types.Count());
         }
 
         [Test]
@@ -125,10 +183,30 @@ namespace UGF.Types.Runtime.Tests
         [Test]
         public void TryGetIdentifierFromType()
         {
+#pragma warning disable 618
             bool result = TypesUtility.TryGetIdentifierFromType(typeof(Target), out object id);
+#pragma warning restore 618
 
             Assert.True(result);
             Assert.AreEqual(new Guid("f6ca48946268479d95729efbc8be5eda"), id);
+        }
+
+        [Test]
+        public void TryGetIdentifierFromTypeString()
+        {
+            bool result = TypesUtility.TryGetIdentifierFromType(typeof(Target3), out string id);
+
+            Assert.True(result);
+            Assert.AreEqual(id, "target");
+        }
+
+        [Test]
+        public void TryGetIdentifierFromTypeInt32()
+        {
+            bool result = TypesUtility.TryGetIdentifierFromType(typeof(Target3), out int id);
+
+            Assert.True(result);
+            Assert.AreEqual(10, id);
         }
 
         [Test]
@@ -138,6 +216,16 @@ namespace UGF.Types.Runtime.Tests
 
             Assert.True(result);
             Assert.NotNull(target);
+        }
+
+        [Test]
+        public void TryCreateTypeWithArguments()
+        {
+            bool result = TypesUtility.TryCreateType(typeof(Target2), new object[] { 10F }, out Target2 target);
+
+            Assert.True(result);
+            Assert.NotNull(target);
+            Assert.AreEqual(10F, target.Value);
         }
     }
 }
