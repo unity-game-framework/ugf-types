@@ -4,14 +4,14 @@ UGF.Types
 
 ## Info
 
-- **Version**: `2.1.1`
+- **Version**: `2.2.0`
 - **Unity Version**: `2019.1.0`
 - **Scripting Runtime Version**: `.NET 4.x Equivalent`
 - **Api Compatibility Level**: `.NET Standard 2.0`
 
 ### Dependencies
 
-- [UGF.Assemblies](https://github.com/unity-game-framework/ugf-assemblies): `1.5.1`
+- [UGF.Assemblies](https://github.com/unity-game-framework/ugf-assemblies): `1.5.2`
 
 ### Changelog
 

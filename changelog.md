@@ -9,6 +9,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [Milestone](https://github.com/unity-game-framework/ugf-types/milestone/0?closed=1)
 
 ### Added
+- Nothing.
+
+### Changed
+- Nothing.
+
+### Deprecated
+- Nothing.
+
+### Removed
+- Nothing.
+
+### Fixed
+- Nothing.
+
+### Security
+- Nothing.
+
+## 2.2.0 - 2019-05-20
+- [Commits](https://github.com/unity-game-framework/ugf-types/compare/2.1.1...2.2.0)
+- [Milestone](https://github.com/unity-game-framework/ugf-types/milestone/6?closed=1)
+
+### Added
 - `TypeIdentifierInt32Attribute` and `TypeIdentifierStringAttribute` to support register types with identifier types as `Int32` or `String`.
 - `TypesUtility.TryGetIdentifierFromType` overload with additional parameter that allow to specify identifier type.
 - `TypesUtility.TryGetIdentifierAttribute` to get attribute that define the identifier of the specific type.
@@ -21,15 +43,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 - `TypesUtility.TryGetIdentifierFromType` overload with identifier as `object` has been deprecated, use overload with additional parameter that allow to specify identifier type.
-
-### Removed
-- Nothing.
-
-### Fixed
-- Nothing.
-
-### Security
-- Nothing.
 
 ## 2.1.1 - 2019-04-23
 - [Commits](https://github.com/unity-game-framework/ugf-types/compare/2.1.0...2.1.1)
