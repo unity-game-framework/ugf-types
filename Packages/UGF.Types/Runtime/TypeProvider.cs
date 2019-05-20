@@ -35,6 +35,8 @@ namespace UGF.Types.Runtime
 
         public bool TryAdd(Type type)
         {
+            if (type == null) throw new ArgumentNullException(nameof(type));
+
             if (TypesUtility.TryGetIdentifierFromType(type, out TIdentifier identifier))
             {
                 Add(identifier, type);
@@ -46,6 +48,10 @@ namespace UGF.Types.Runtime
 
         public void Add(TIdentifier identifier, Type type)
         {
+            if (type == null) throw new ArgumentNullException(nameof(type));
+            if (m_types.ContainsKey(identifier)) throw new ArgumentException($"The same type with the specified identifier already added: Identifier: '{identifier}', Type: '{type}'.", nameof(identifier));
+            if (m_identifiers.ContainsKey(type)) throw new ArgumentException($"The same type with the different identifier already added: Identifier: '{identifier}', Type: '{type}'.", nameof(type));
+
             m_types.Add(identifier, type);
             m_identifiers.Add(type, identifier);
         }
@@ -70,11 +76,15 @@ namespace UGF.Types.Runtime
 
         public TIdentifier GetIdentifier(Type type)
         {
+            if (type == null) throw new ArgumentNullException(nameof(type));
+
             return m_identifiers[type];
         }
 
         public bool TryGetIdentifier(Type type, out TIdentifier identifier)
         {
+            if (type == null) throw new ArgumentNullException(nameof(type));
+
             return m_identifiers.TryGetValue(type, out identifier);
         }
 
