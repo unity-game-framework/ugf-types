@@ -4,14 +4,13 @@ UGF.Types
 
 ## Info
 
-- **Version**: `2.2.0`
-- **Unity Version**: `2019.1.0`
-- **Scripting Runtime Version**: `.NET 4.x Equivalent`
+- **Version**: `3.0.0-preview`
+- **Unity Version**: `2019.3.0`
 - **Api Compatibility Level**: `.NET Standard 2.0`
 
 ### Dependencies
 
-- [UGF.Assemblies](https://github.com/unity-game-framework/ugf-assemblies): `1.5.2`
+- N/A
 
 ### Changelog
 
@@ -19,12 +18,12 @@ UGF.Types
 
 ### Registries
 
-- [Stable][2]
+- [Stable][2] (N/A)
 - [Develop][3]
 
 ## Description
 
-No description.
+Provides utilities to work with type search and manage.
 
 ## How to Install
 

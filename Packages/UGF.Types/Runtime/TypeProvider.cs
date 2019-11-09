@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using UGF.Types.Runtime.Attributes;
 
 namespace UGF.Types.Runtime
 {
@@ -37,7 +38,7 @@ namespace UGF.Types.Runtime
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
 
-            if (TypesUtility.TryGetIdentifierFromType(type, out TIdentifier identifier))
+            if (TypesIdentifierUtility.TryGetIdentifierFromType(type, out TIdentifier identifier))
             {
                 Add(identifier, type);
                 return true;
