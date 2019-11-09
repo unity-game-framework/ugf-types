@@ -26,6 +26,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 - Nothing.
 
+## 3.0.0-preview - 2019-11-09
+- [Commits](https://github.com/unity-game-framework/ugf-types/compare/2.2.0...3.0.0-preview)
+- [Milestone](https://github.com/unity-game-framework/ugf-types/milestone/7?closed=1)
+
+### Added
+- `ITypeValidation` to select target types using enumerable from `TypesUtility.GetTypesAll`.
+
+### Changed
+- Update to Unity 2019.3
+- Moved all attributes relatives code under the `UGF.Types.Runtime.Attributes` namespace.
+- `TypesUtility`: moved all attributes relative methods to `TypesIdentifierUtility` class.
+
+### Removed
+- All editor specific code. (Moved to [UGF.EditorTools](https://github.com/unity-game-framework/ugf-editortools))
+- Removed TypeDefines.
+- Package dependencies:
+    - `com.ugf.assemblies`: `1.5.2`.
+
 ## 2.2.0 - 2019-05-20
 - [Commits](https://github.com/unity-game-framework/ugf-types/compare/2.1.1...2.2.0)
 - [Milestone](https://github.com/unity-game-framework/ugf-types/milestone/6?closed=1)

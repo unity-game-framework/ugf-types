@@ -4,7 +4,7 @@ UGF.Types
 
 ## Info
 
-- **Version**: `2.2.0`
+- **Version**: `3.0.0-preview`
 - **Unity Version**: `2019.3.0`
 - **Api Compatibility Level**: `.NET Standard 2.0`
 
@@ -18,12 +18,12 @@ UGF.Types
 
 ### Registries
 
-- [Stable][2]
+- [Stable][2] (N/A)
 - [Develop][3]
 
 ## Description
 
-No description.
+Provides utilities to work with type search and manage.
 
 ## How to Install
 

@@ -1,9 +1,9 @@
 {
     "name": "com.ugf.types",
     "displayName": "UGF.Types",
-    "version": "2.2.0",
+    "version": "3.0.0-preview",
     "unity": "2019.3",
-    "description": "No description.",
+    "description": "Provides utilities to work with type search and manage.",
     "author": {
         "name": "Unity Game Framework",
         "url": "https://github.com/unity-game-framework"
