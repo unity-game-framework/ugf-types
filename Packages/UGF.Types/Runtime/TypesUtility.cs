@@ -13,12 +13,22 @@ namespace UGF.Types.Runtime
         /// <summary>
         /// Gets enumerable through the all loaded types.
         /// </summary>
+        /// <param name="validation">The type validation.</param>
+        public static TypesAllEnumerable GetTypesAll(ITypeValidation validation)
+        {
+            return GetTypesAll(null, validation);
+        }
+
+        /// <summary>
+        /// Gets enumerable through the all loaded types.
+        /// </summary>
         /// <param name="assembly">The assembly to search, if null, will search through the all assemblies.</param>
-        public static TypesAllEnumerable GetTypesAll(Assembly assembly = null)
+        /// <param name="validation">The type validation.</param>
+        public static TypesAllEnumerable GetTypesAll(Assembly assembly = null, ITypeValidation validation = null)
         {
             return assembly != null
-                ? new TypesAllEnumerable(assembly)
-                : new TypesAllEnumerable(AppDomain.CurrentDomain.GetAssemblies());
+                ? new TypesAllEnumerable(assembly, validation)
+                : new TypesAllEnumerable(AppDomain.CurrentDomain.GetAssemblies(), validation);
         }
 
         /// <summary>
