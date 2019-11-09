@@ -1,12 +1,11 @@
 using System;
-using UGF.Assemblies.Runtime;
 
 namespace UGF.Types.Runtime.Attributes
 {
     /// <summary>
     /// Represents browsable attribute that store identifier of the type.
     /// </summary>
-    public class TypeIdentifierAttribute : AssemblyBrowsableTypeAttribute
+    public class TypeIdentifierAttribute : Attribute
     {
         /// <summary>
         /// Gets the type of identifier.

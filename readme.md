@@ -10,7 +10,7 @@ UGF.Types
 
 ### Dependencies
 
-- [UGF.Assemblies](https://github.com/unity-game-framework/ugf-assemblies): `1.5.2`
+- N/A
 
 ### Changelog
 
