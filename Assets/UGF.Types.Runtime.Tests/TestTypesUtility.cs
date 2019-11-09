@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
+using UGF.Types.Runtime.Attributes;
 
 namespace UGF.Types.Runtime.Tests
 {
@@ -96,85 +97,9 @@ namespace UGF.Types.Runtime.Tests
         }
 
         [Test]
-        public void GetTypeDefines()
-        {
-            var defines = new List<ITypeDefine>();
-
-            TypesUtility.GetTypeDefines(defines);
-
-            Assert.AreEqual(1, defines.Count);
-
-            ITypeDefine define = defines[0];
-
-            Assert.NotNull(define);
-            Assert.IsAssignableFrom<TestTypeDefine>(define);
-        }
-
-        [Test]
-        public void GetTypesProvider()
-        {
-            ITypeProvider provider = new TypeProvider<Guid>();
-
-            TypesUtility.GetTypes(provider, typeof(Guid), null, false);
-
-            Assert.AreEqual(2, provider.Types.Count());
-        }
-
-        [Test]
-        public void GetTypesProviderString()
-        {
-            ITypeProvider provider = new TypeProvider<string>();
-
-            TypesUtility.GetTypes(provider, typeof(string), null, false);
-
-            Assert.AreEqual(1, provider.Types.Count());
-        }
-
-        [Test]
-        public void GetTypesProviderInt32()
-        {
-            ITypeProvider provider = new TypeProvider<int>();
-
-            TypesUtility.GetTypes(provider, typeof(int), null, false);
-
-            Assert.AreEqual(1, provider.Types.Count());
-        }
-
-        [Test]
-        public void GetTypesProviderGeneric()
-        {
-            var provider = new TypeProvider<Guid>();
-
-            TypesUtility.GetTypes(provider, null, false);
-
-            Assert.AreEqual(2, provider.Types.Count);
-        }
-
-        [Test]
-        public void GetTypesWithDefines()
-        {
-            var provider = new TypeProvider<Guid>();
-
-            TypesUtility.GetTypes(provider);
-
-            Assert.AreEqual(5, provider.Types.Count);
-        }
-
-        [Test]
-        public void GetTypesFromAssembly()
-        {
-            var provider = new TypeProvider<Guid>();
-            Assembly assembly = typeof(Target).Assembly;
-
-            TypesUtility.GetTypes(provider, assembly, false);
-
-            Assert.AreEqual(1, provider.Types.Count);
-        }
-
-        [Test]
         public void TryGetIdentifierFromTypeGeneric()
         {
-            bool result = TypesUtility.TryGetIdentifierFromType(typeof(Target), out Guid id);
+            bool result = TypesIdentifierUtility.TryGetIdentifierFromType(typeof(Target), out Guid id);
 
             Assert.True(result);
             Assert.AreEqual(new Guid("f6ca48946268479d95729efbc8be5eda"), id);
@@ -183,9 +108,7 @@ namespace UGF.Types.Runtime.Tests
         [Test]
         public void TryGetIdentifierFromType()
         {
-#pragma warning disable 618
-            bool result = TypesUtility.TryGetIdentifierFromType(typeof(Target), out object id);
-#pragma warning restore 618
+            bool result = TypesIdentifierUtility.TryGetIdentifierFromType(typeof(Target), typeof(Guid), out object id);
 
             Assert.True(result);
             Assert.AreEqual(new Guid("f6ca48946268479d95729efbc8be5eda"), id);
@@ -194,7 +117,7 @@ namespace UGF.Types.Runtime.Tests
         [Test]
         public void TryGetIdentifierFromTypeString()
         {
-            bool result = TypesUtility.TryGetIdentifierFromType(typeof(Target3), out string id);
+            bool result = TypesIdentifierUtility.TryGetIdentifierFromType(typeof(Target3), out string id);
 
             Assert.True(result);
             Assert.AreEqual(id, "target");
@@ -203,7 +126,7 @@ namespace UGF.Types.Runtime.Tests
         [Test]
         public void TryGetIdentifierFromTypeInt32()
         {
-            bool result = TypesUtility.TryGetIdentifierFromType(typeof(Target3), out int id);
+            bool result = TypesIdentifierUtility.TryGetIdentifierFromType(typeof(Target3), out int id);
 
             Assert.True(result);
             Assert.AreEqual(10, id);

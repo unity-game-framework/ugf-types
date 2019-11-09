@@ -1,9 +1,6 @@
 {
     "name": "UGF.Types.Runtime",
-    "references": [
-        "GUID:47c3349eaf0910446a6e557ee1a6748f"
-    ],
-    "optionalUnityReferences": [],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
@@ -11,5 +8,6 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": []
+    "versionDefines": [],
+    "noEngineReferences": false
 }
