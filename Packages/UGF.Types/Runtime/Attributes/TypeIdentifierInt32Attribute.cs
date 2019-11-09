@@ -1,11 +1,11 @@
-namespace UGF.Types.Runtime
+namespace UGF.Types.Runtime.Attributes
 {
     /// <summary>
     /// Presents attribute to store identifier as Int32 for the target type.
     /// </summary>
     public sealed class TypeIdentifierInt32Attribute : TypeIdentifierAttribute, ITypeIdentifierAttribute<int>
     {
-        public int Identifier { get; }
+        public new int Identifier { get; }
 
         /// <summary>
         /// Creates attribute with the specified identifier as Int32.

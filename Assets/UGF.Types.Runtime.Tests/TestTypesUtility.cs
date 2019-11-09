@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
+using UGF.Types.Runtime.Attributes;
 
 namespace UGF.Types.Runtime.Tests
 {
@@ -98,7 +99,7 @@ namespace UGF.Types.Runtime.Tests
         [Test]
         public void TryGetIdentifierFromTypeGeneric()
         {
-            bool result = TypesUtility.TryGetIdentifierFromType(typeof(Target), out Guid id);
+            bool result = TypesIdentifierUtility.TryGetIdentifierFromType(typeof(Target), out Guid id);
 
             Assert.True(result);
             Assert.AreEqual(new Guid("f6ca48946268479d95729efbc8be5eda"), id);
@@ -107,9 +108,7 @@ namespace UGF.Types.Runtime.Tests
         [Test]
         public void TryGetIdentifierFromType()
         {
-#pragma warning disable 618
-            bool result = TypesUtility.TryGetIdentifierFromType(typeof(Target), out object id);
-#pragma warning restore 618
+            bool result = TypesIdentifierUtility.TryGetIdentifierFromType(typeof(Target), typeof(Guid), out object id);
 
             Assert.True(result);
             Assert.AreEqual(new Guid("f6ca48946268479d95729efbc8be5eda"), id);
@@ -118,7 +117,7 @@ namespace UGF.Types.Runtime.Tests
         [Test]
         public void TryGetIdentifierFromTypeString()
         {
-            bool result = TypesUtility.TryGetIdentifierFromType(typeof(Target3), out string id);
+            bool result = TypesIdentifierUtility.TryGetIdentifierFromType(typeof(Target3), out string id);
 
             Assert.True(result);
             Assert.AreEqual(id, "target");
@@ -127,7 +126,7 @@ namespace UGF.Types.Runtime.Tests
         [Test]
         public void TryGetIdentifierFromTypeInt32()
         {
-            bool result = TypesUtility.TryGetIdentifierFromType(typeof(Target3), out int id);
+            bool result = TypesIdentifierUtility.TryGetIdentifierFromType(typeof(Target3), out int id);
 
             Assert.True(result);
             Assert.AreEqual(10, id);

@@ -1,11 +1,11 @@
-namespace UGF.Types.Runtime
+namespace UGF.Types.Runtime.Attributes
 {
     /// <summary>
     /// Presents attribute to store identifier as String for the target type.
     /// </summary>
     public sealed class TypeIdentifierStringAttribute : TypeIdentifierAttribute, ITypeIdentifierAttribute<string>
     {
-        public string Identifier { get; }
+        public new string Identifier { get; }
 
         /// <summary>
         /// Creates attribute with the specified identifier as String.

@@ -1,21 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using UGF.Assemblies.Runtime;
+using UGF.Types.Runtime.Attributes;
 
 namespace UGF.Types.Runtime
 {
     /// <summary>
     /// Provides utilities to work with types.
     /// </summary>
-    public static partial class TypesUtility
+    public static class TypesUtility
     {
         /// <summary>
         /// Gets enumerable through the all loaded types.
         /// </summary>
-        public static TypesAllEnumerable GetTypesAll()
+        /// <param name="assembly">The assembly to search, if null, will search through the all assemblies.</param>
+        public static TypesAllEnumerable GetTypesAll(Assembly assembly = null)
         {
-            return new TypesAllEnumerable(AppDomain.CurrentDomain.GetAssemblies());
+            return assembly != null
+                ? new TypesAllEnumerable(assembly)
+                : new TypesAllEnumerable(AppDomain.CurrentDomain.GetAssemblies());
         }
 
         /// <summary>
@@ -34,79 +37,13 @@ namespace UGF.Types.Runtime
         {
             if (results == null) throw new ArgumentNullException(nameof(results));
 
-            foreach (Type type in AssemblyUtility.GetBrowsableTypes<TypeIdentifierAttribute>(assembly, false))
+            foreach (Type type in GetTypesAll(assembly))
             {
-                if (identifierType == null || TryGetIdentifierAttribute(type, identifierType, out _))
+                if (identifierType == null || TypesIdentifierUtility.TryGetIdentifierAttribute(type, identifierType, out _))
                 {
                     results.Add(type);
                 }
             }
-        }
-
-        /// <summary>
-        /// Tries to get type identifier from the specified type that contains identifier attribute.
-        /// </summary>
-        /// <param name="type">The target type.</param>
-        /// <param name="identifier">The found identifier.</param>
-        public static bool TryGetIdentifierFromType<T>(Type type, out T identifier)
-        {
-            if (type == null) throw new ArgumentNullException(nameof(type));
-
-            if (TryGetIdentifierAttribute(type, typeof(T), out TypeIdentifierAttribute attribute) && attribute is ITypeIdentifierAttribute<T> typeIdentifierAttribute)
-            {
-                identifier = typeIdentifierAttribute.Identifier;
-                return true;
-            }
-
-            identifier = default;
-            return false;
-        }
-
-        /// <summary>
-        /// Tries to get type identifier from the specified type that contains identifier attribute.
-        /// </summary>
-        /// <param name="type">The target type.</param>
-        /// <param name="identifierType">The type of the identifier.</param>
-        /// <param name="identifier">The found identifier.</param>
-        public static bool TryGetIdentifierFromType(Type type, Type identifierType, out object identifier)
-        {
-            if (type == null) throw new ArgumentNullException(nameof(type));
-            if (identifierType == null) throw new ArgumentNullException(nameof(identifierType));
-
-            if (TryGetIdentifierAttribute(type, identifierType, out TypeIdentifierAttribute attribute))
-            {
-                identifier = attribute.GetIdentifier();
-                return true;
-            }
-
-            identifier = null;
-            return false;
-        }
-
-        /// <summary>
-        /// Tries to get identifier type attribute from the specified type that support specified identifier type.
-        /// </summary>
-        /// <param name="type">The target type.</param>
-        /// <param name="identifierType">The type of the identifier.</param>
-        /// <param name="attribute">The found attribute.</param>
-        public static bool TryGetIdentifierAttribute(Type type, Type identifierType, out TypeIdentifierAttribute attribute)
-        {
-            if (type == null) throw new ArgumentNullException(nameof(type));
-            if (identifierType == null) throw new ArgumentNullException(nameof(identifierType));
-
-            object[] attributes = type.GetCustomAttributes(false);
-
-            for (int i = 0; i < attributes.Length; i++)
-            {
-                if (attributes[i] is TypeIdentifierAttribute typeIdentifierAttribute && typeIdentifierAttribute.IdentifierType == identifierType)
-                {
-                    attribute = typeIdentifierAttribute;
-                    return true;
-                }
-            }
-
-            attribute = null;
-            return false;
         }
 
         /// <summary>

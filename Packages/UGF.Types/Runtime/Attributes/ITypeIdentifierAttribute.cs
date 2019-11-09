@@ -1,4 +1,4 @@
-namespace UGF.Types.Runtime
+namespace UGF.Types.Runtime.Attributes
 {
     /// <summary>
     /// The generic interface to define the type of identifier for attribute.

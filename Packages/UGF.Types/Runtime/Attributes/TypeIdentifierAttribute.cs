@@ -1,7 +1,7 @@
 using System;
 using UGF.Assemblies.Runtime;
 
-namespace UGF.Types.Runtime
+namespace UGF.Types.Runtime.Attributes
 {
     /// <summary>
     /// Represents browsable attribute that store identifier of the type.
@@ -13,7 +13,10 @@ namespace UGF.Types.Runtime
         /// </summary>
         public Type IdentifierType { get; }
 
-        private readonly object m_identifier;
+        /// <summary>
+        /// Gets the identifier.
+        /// </summary>
+        public object Identifier { get; }
 
         /// <summary>
         /// Creates with the specified type of the identifier and identifier value.
@@ -22,16 +25,8 @@ namespace UGF.Types.Runtime
         /// <param name="identifier">The identifier value.</param>
         public TypeIdentifierAttribute(Type identifierType, object identifier)
         {
-            m_identifier = identifier;
-            IdentifierType = identifierType;
-        }
-
-        /// <summary>
-        /// Gets the identifier value.
-        /// </summary>
-        public object GetIdentifier()
-        {
-            return m_identifier;
+            IdentifierType = identifierType ?? throw new ArgumentNullException(nameof(identifierType));
+            Identifier = identifier ?? throw new ArgumentNullException(nameof(identifier));
         }
     }
 }
