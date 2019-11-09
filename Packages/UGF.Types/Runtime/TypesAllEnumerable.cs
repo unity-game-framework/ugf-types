@@ -12,6 +12,7 @@ namespace UGF.Types.Runtime
     {
         private readonly Assembly m_assembly;
         private readonly IReadOnlyList<Assembly> m_assemblies;
+        private readonly ITypeValidation m_validation;
 
         public struct Enumerator : IEnumerator<Type>
         {
@@ -20,26 +21,29 @@ namespace UGF.Types.Runtime
             object IEnumerator.Current { get { return m_current; } }
 
             private readonly Assembly m_assembly;
-            private IReadOnlyList<Assembly> m_assemblies;
+            private readonly IReadOnlyList<Assembly> m_assemblies;
+            private readonly ITypeValidation m_validation;
             private int m_assemblyIndex;
             private Type[] m_types;
             private int m_typeIndex;
             private Type m_current;
 
-            public Enumerator(Assembly assembly)
+            public Enumerator(Assembly assembly, ITypeValidation validation = null)
             {
                 m_assembly = assembly;
                 m_assemblies = null;
+                m_validation = validation;
                 m_assemblyIndex = 0;
                 m_types = null;
                 m_typeIndex = 0;
                 m_current = null;
             }
 
-            public Enumerator(IReadOnlyList<Assembly> assemblies)
+            public Enumerator(IReadOnlyList<Assembly> assemblies, ITypeValidation validation = null)
             {
                 m_assembly = null;
                 m_assemblies = assemblies;
+                m_validation = validation;
                 m_assemblyIndex = 0;
                 m_types = null;
                 m_typeIndex = 0;
@@ -63,8 +67,17 @@ namespace UGF.Types.Runtime
 
                     if (type != null)
                     {
-                        m_current = type;
-                        return true;
+                        if (m_validation == null)
+                        {
+                            m_current = type;
+                            return true;
+                        }
+
+                        if (m_validation.Validate(type))
+                        {
+                            m_current = type;
+                            return true;
+                        }
                     }
 
                     if (!Next())
@@ -136,32 +149,36 @@ namespace UGF.Types.Runtime
         /// Creates enumerable from the specified collection of the assembly.
         /// </summary>
         /// <param name="assembly">The assembly to enumerate.</param>
-        public TypesAllEnumerable(Assembly assembly)
+        /// <param name="validation">The type validation.</param>
+        public TypesAllEnumerable(Assembly assembly, ITypeValidation validation = null)
         {
             m_assembly = assembly;
             m_assemblies = null;
+            m_validation = validation;
         }
 
         /// <summary>
         /// Creates enumerable from the specified collection of the assemblies.
         /// </summary>
         /// <param name="assemblies">The assemblies to enumerate.</param>
-        public TypesAllEnumerable(IReadOnlyList<Assembly> assemblies)
+        /// <param name="validation">The type validation.</param>
+        public TypesAllEnumerable(IReadOnlyList<Assembly> assemblies, ITypeValidation validation = null)
         {
             m_assembly = null;
             m_assemblies = assemblies;
+            m_validation = validation;
         }
 
         public Enumerator GetEnumerator()
         {
             if (m_assembly != null)
             {
-                return new Enumerator(m_assembly);
+                return new Enumerator(m_assembly, m_validation);
             }
 
             if (m_assemblies != null)
             {
-                return new Enumerator(m_assemblies);
+                return new Enumerator(m_assemblies, m_validation);
             }
 
             return new Enumerator();
