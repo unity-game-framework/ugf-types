@@ -1,32 +1,23 @@
 # Changelog
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased - 2019-01-01
-- [Commits](https://github.com/unity-game-framework/ugf-types/compare/0.0.0...0.0.0)
-- [Milestone](https://github.com/unity-game-framework/ugf-types/milestone/0?closed=1)
+## [3.1.0-preview](https://github.com/unity-game-framework/ugf-types/releases/tag/3.1.0-preview) - 2020-09-18  
 
-### Added
-- Nothing.
+### Release Notes
+
+- [Milestone](https://github.com/unity-game-framework/ugf-types/milestone/8?closed=1)  
+    
 
 ### Changed
-- Nothing.
 
-### Deprecated
-- Nothing.
+- Update project to Unity 2020.1 ([#23](https://github.com/unity-game-framework/ugf-types/pull/23))
 
-### Removed
-- Nothing.
+## [3.0.0-preview](https://github.com/unity-game-framework/ugf-types/releases/tag/3.0.0-preview) - 2019-11-09  
 
-### Fixed
-- Nothing.
-
-### Security
-- Nothing.
-
-## 3.0.0-preview - 2019-11-09
 - [Commits](https://github.com/unity-game-framework/ugf-types/compare/2.2.0...3.0.0-preview)
 - [Milestone](https://github.com/unity-game-framework/ugf-types/milestone/7?closed=1)
 
@@ -44,7 +35,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Package dependencies:
     - `com.ugf.assemblies`: `1.5.2`.
 
-## 2.2.0 - 2019-05-20
+## [2.2.0](https://github.com/unity-game-framework/ugf-types/releases/tag/2.2.0) - 2019-05-20  
+
 - [Commits](https://github.com/unity-game-framework/ugf-types/compare/2.1.1...2.2.0)
 - [Milestone](https://github.com/unity-game-framework/ugf-types/milestone/6?closed=1)
 
@@ -62,7 +54,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 - `TypesUtility.TryGetIdentifierFromType` overload with identifier as `object` has been deprecated, use overload with additional parameter that allow to specify identifier type.
 
-## 2.1.1 - 2019-04-23
+## [2.1.1](https://github.com/unity-game-framework/ugf-types/releases/tag/2.1.1) - 2019-04-23  
+
 - [Commits](https://github.com/unity-game-framework/ugf-types/compare/2.1.0...2.1.1)
 - [Milestone](https://github.com/unity-game-framework/ugf-types/milestone/5?closed=1)
 
@@ -73,7 +66,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - `UGF.Types.Editor.asmdef` targeting to any platform what cause build errors.
 
-## 2.1.0 - 2019-04-18
+## [2.1.0](https://github.com/unity-game-framework/ugf-types/releases/tag/2.1.0) - 2019-04-18  
+
 - [Commits](https://github.com/unity-game-framework/ugf-types/compare/2.0.0...2.1.0)
 - [Milestone](https://github.com/unity-game-framework/ugf-types/milestone/4?closed=1)
 
@@ -85,7 +79,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Package dependencies:
     - `com.ugf.assemblies`: from `1.4.0` to `1.4.1`.
 
-## 2.0.0 - 2019-04-17
+## [2.0.0](https://github.com/unity-game-framework/ugf-types/releases/tag/2.0.0) - 2019-04-17  
+
 - [Commits](https://github.com/unity-game-framework/ugf-types/compare/1.1.0...2.0.0)
 - [Milestone](https://github.com/unity-game-framework/ugf-types/milestone/3?closed=1)
 
@@ -108,21 +103,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `TypesUtility.AddTypes` because it was useless.
 - `TypesUtility.CollectTypes` because using standard ways more efficient.
 
-## 1.1.0 - 2019-04-14
+## [1.1.0](https://github.com/unity-game-framework/ugf-types/releases/tag/1.1.0) - 2019-04-14  
+
 - [Commits](https://github.com/unity-game-framework/ugf-types/compare/1.0.0...1.1.0)
 - [Milestone](https://github.com/unity-game-framework/ugf-types/milestone/2?closed=1)
 
 ### Added
 - `TypesUtility.CollectTypes` to collect types with validation.
 - `TypesEditorGUIUtility.GetTypesDropdown` to create an advanced editor dropdown that displays types selection menu.
-- `TypesUtility.TryGetIdentifierFromType` to retrieve type identifier from attribute directly.
+- `TypesUtility.TryGetIdentifierFromType` to retrieve type identifier from attribute directly. (#4)
 
-## 1.0.0 - 2019-03-24
+## [1.0.0](https://github.com/unity-game-framework/ugf-types/releases/tag/1.0.0) - 2019-03-24  
+
 - [Commits](https://github.com/unity-game-framework/ugf-types/compare/93305d0...1.0.0)
 - [Milestone](https://github.com/unity-game-framework/ugf-types/milestone/1?closed=1)
 
 ### Added
 - This is a initial release.
 
----
-> Unity Game Framework | Copyright 2019
+
