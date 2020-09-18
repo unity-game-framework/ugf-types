@@ -2,11 +2,25 @@
     "name": "com.ugf.types",
     "displayName": "UGF.Types",
     "version": "3.0.0-preview",
-    "unity": "2019.3",
-    "description": "Provides utilities to work with type search and manage.",
+    "unity": "2020.1",
+    "apiCompatibility": ".NET Standard 2.0",
+    "description": "Provides tools to work with types.",
     "author": {
         "name": "Unity Game Framework",
         "url": "https://github.com/unity-game-framework"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/unity-game-framework/ugf-types.git",
+        "directory": "Packages/Package"
+    },
+    "changelogUrl": "https://github.com/unity-game-framework/ugf-types/blob/master/license",
+    "licenseUrl": "https://github.com/unity-game-framework/ugf-types/blob/master/changelog.md",
+    "publishConfig": {
+        "registry": "https://npm.pkg.github.com/@unity-game-framework"
+    },
+    "bintray": {
+        "registry": "https://api.bintray.com/content/unity-game-framework/public"
     },
     "dependencies": {}
 }
