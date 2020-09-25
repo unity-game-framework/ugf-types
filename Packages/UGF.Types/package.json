@@ -11,8 +11,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git://github.com/unity-game-framework/ugf-types.git",
-        "directory": "Packages/Package"
+        "url": "git://github.com/unity-game-framework/ugf-types.git"
     },
     "changelogUrl": "https://github.com/unity-game-framework/ugf-types/blob/master/license",
     "licenseUrl": "https://github.com/unity-game-framework/ugf-types/blob/master/changelog.md",
